@@ -9,8 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WordsRouteImport } from './routes/words'
+import { Route as PracticeRouteImport } from './routes/practice'
+import { Route as MySentencesRouteImport } from './routes/my-sentences'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WordsRoute = WordsRouteImport.update({
+  id: '/words',
+  path: '/words',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PracticeRoute = PracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MySentencesRoute = MySentencesRouteImport.update({
+  id: '/my-sentences',
+  path: '/my-sentences',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +37,61 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/my-sentences': typeof MySentencesRoute
+  '/practice': typeof PracticeRoute
+  '/words': typeof WordsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/my-sentences': typeof MySentencesRoute
+  '/practice': typeof PracticeRoute
+  '/words': typeof WordsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/my-sentences': typeof MySentencesRoute
+  '/practice': typeof PracticeRoute
+  '/words': typeof WordsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/my-sentences' | '/practice' | '/words'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/my-sentences' | '/practice' | '/words'
+  id: '__root__' | '/' | '/my-sentences' | '/practice' | '/words'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MySentencesRoute: typeof MySentencesRoute
+  PracticeRoute: typeof PracticeRoute
+  WordsRoute: typeof WordsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/words': {
+      id: '/words'
+      path: '/words'
+      fullPath: '/words'
+      preLoaderRoute: typeof WordsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/practice': {
+      id: '/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof PracticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-sentences': {
+      id: '/my-sentences'
+      path: '/my-sentences'
+      fullPath: '/my-sentences'
+      preLoaderRoute: typeof MySentencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +104,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MySentencesRoute: MySentencesRoute,
+  PracticeRoute: PracticeRoute,
+  WordsRoute: WordsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
