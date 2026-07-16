@@ -6,7 +6,7 @@ import { checkSentence, useSentences } from "@/lib/sentences";
 
 const searchSchema = z.object({ word: z.string().optional() });
 
-export const Route = createFileRoute("/practice")({
+export const Route = createFileRoute("/_authenticated/practice")({
   validateSearch: (s) => searchSchema.parse(s),
   head: () => ({
     meta: [
