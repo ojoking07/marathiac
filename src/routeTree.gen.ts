@@ -10,23 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WordsRouteImport } from './routes/words'
-import { Route as PracticeRouteImport } from './routes/practice'
-import { Route as MySentencesRouteImport } from './routes/my-sentences'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedTestRouteImport } from './routes/_authenticated/test'
+import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
+import { Route as AuthenticatedMySentencesRouteImport } from './routes/_authenticated/my-sentences'
 
 const WordsRoute = WordsRouteImport.update({
   id: '/words',
   path: '/words',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PracticeRoute = PracticeRouteImport.update({
-  id: '/practice',
-  path: '/practice',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MySentencesRoute = MySentencesRouteImport.update({
-  id: '/my-sentences',
-  path: '/my-sentences',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -34,38 +36,69 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedTestRoute = AuthenticatedTestRouteImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMySentencesRoute =
+  AuthenticatedMySentencesRouteImport.update({
+    id: '/my-sentences',
+    path: '/my-sentences',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/my-sentences': typeof MySentencesRoute
-  '/practice': typeof PracticeRoute
+  '/auth': typeof AuthRoute
   '/words': typeof WordsRoute
+  '/my-sentences': typeof AuthenticatedMySentencesRoute
+  '/practice': typeof AuthenticatedPracticeRoute
+  '/test': typeof AuthenticatedTestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/my-sentences': typeof MySentencesRoute
-  '/practice': typeof PracticeRoute
+  '/auth': typeof AuthRoute
   '/words': typeof WordsRoute
+  '/my-sentences': typeof AuthenticatedMySentencesRoute
+  '/practice': typeof AuthenticatedPracticeRoute
+  '/test': typeof AuthenticatedTestRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/my-sentences': typeof MySentencesRoute
-  '/practice': typeof PracticeRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/words': typeof WordsRoute
+  '/_authenticated/my-sentences': typeof AuthenticatedMySentencesRoute
+  '/_authenticated/practice': typeof AuthenticatedPracticeRoute
+  '/_authenticated/test': typeof AuthenticatedTestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/my-sentences' | '/practice' | '/words'
+  fullPaths: '/' | '/auth' | '/words' | '/my-sentences' | '/practice' | '/test'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/my-sentences' | '/practice' | '/words'
-  id: '__root__' | '/' | '/my-sentences' | '/practice' | '/words'
+  to: '/' | '/auth' | '/words' | '/my-sentences' | '/practice' | '/test'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/words'
+    | '/_authenticated/my-sentences'
+    | '/_authenticated/practice'
+    | '/_authenticated/test'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  MySentencesRoute: typeof MySentencesRoute
-  PracticeRoute: typeof PracticeRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   WordsRoute: typeof WordsRoute
 }
 
@@ -78,18 +111,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WordsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/practice': {
-      id: '/practice'
-      path: '/practice'
-      fullPath: '/practice'
-      preLoaderRoute: typeof PracticeRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/my-sentences': {
-      id: '/my-sentences'
-      path: '/my-sentences'
-      fullPath: '/my-sentences'
-      preLoaderRoute: typeof MySentencesRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -99,25 +132,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/test': {
+      id: '/_authenticated/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof AuthenticatedTestRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/practice': {
+      id: '/_authenticated/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof AuthenticatedPracticeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/my-sentences': {
+      id: '/_authenticated/my-sentences'
+      path: '/my-sentences'
+      fullPath: '/my-sentences'
+      preLoaderRoute: typeof AuthenticatedMySentencesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedMySentencesRoute: typeof AuthenticatedMySentencesRoute
+  AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
+  AuthenticatedTestRoute: typeof AuthenticatedTestRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedMySentencesRoute: AuthenticatedMySentencesRoute,
+  AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
+  AuthenticatedTestRoute: AuthenticatedTestRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  MySentencesRoute: MySentencesRoute,
-  PracticeRoute: PracticeRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   WordsRoute: WordsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

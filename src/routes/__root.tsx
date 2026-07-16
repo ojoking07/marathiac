@@ -8,9 +8,12 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { useSession } from "../lib/session";
+import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
@@ -18,13 +21,8 @@ function NotFoundComponent() {
       <div className="max-w-md text-center">
         <div className="text-7xl">🌊</div>
         <h1 className="mt-4 text-4xl text-foreground">Page not found</h1>
-        <p className="mt-2 text-muted-foreground">
-          Let's swim back to shore.
-        </p>
-        <Link
-          to="/"
-          className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-pop transition hover:scale-[1.03]"
-        >
+        <p className="mt-2 text-muted-foreground">Let's swim back to shore.</p>
+        <Link to="/" className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-pop transition hover:scale-[1.03]">
           Go home
         </Link>
       </div>
@@ -35,25 +33,15 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
-
+  useEffect(() => { reportLovableError(error, { boundary: "tanstack_root_error_component" }); }, [error]);
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="max-w-md text-center">
         <h1 className="text-2xl text-foreground">Something splashed wrong</h1>
         <p className="mt-2 text-muted-foreground">Try again or head home.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
-            onClick={() => { router.invalidate(); reset(); }}
-            className="rounded-full bg-primary px-5 py-2 font-semibold text-primary-foreground shadow-soft"
-          >
-            Try again
-          </button>
-          <a href="/" className="rounded-full border border-border bg-card px-5 py-2 font-semibold">
-            Go home
-          </a>
+          <button onClick={() => { router.invalidate(); reset(); }} className="rounded-full bg-primary px-5 py-2 font-semibold text-primary-foreground shadow-soft">Try again</button>
+          <a href="/" className="rounded-full border border-border bg-card px-5 py-2 font-semibold">Go home</a>
         </div>
       </div>
     </div>
@@ -65,17 +53,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Sentence Practice - Marathi AC | US Kids 4 Water" },
-      { name: "description", content: "A friendly sentence-building playground for Marathi-speaking children learning English through the US Kids 4 Water Alphabet Commanders program." },
+      { title: "Alphabet Commanders — Sentence Practice for Marathi Students" },
+      { name: "description", content: "A sentence-building and testing playground for Marathi-speaking children learning English through the US Kids 4 Water Alphabet Commanders program." },
       { name: "author", content: "US Kids 4 Water" },
-      { property: "og:title", content: "Sentence Practice - Marathi AC | US Kids 4 Water" },
-      { property: "og:description", content: "A friendly sentence-building playground for Marathi-speaking children learning English through the US Kids 4 Water Alphabet Commanders program." },
+      // Block Grammarly and other writing assistants across the whole app.
+      { name: "grammarly", content: "false" },
+      { property: "og:title", content: "Alphabet Commanders — Sentence Practice" },
+      { property: "og:description", content: "Learn English one sentence at a time. Marathi Alphabet Commanders program." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Sentence Practice - Marathi AC | US Kids 4 Water" },
-      { name: "twitter:description", content: "A friendly sentence-building playground for Marathi-speaking children learning English through the US Kids 4 Water Alphabet Commanders program." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/27e9d6ea-e403-406a-8c22-b86e426ce859/id-preview-a783422c--3121f0d0-ac4b-4bd3-a1db-4a608fef3a0f.lovable.app-1783972858358.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/27e9d6ea-e403-406a-8c22-b86e426ce859/id-preview-a783422c--3121f0d0-ac4b-4bd3-a1db-4a608fef3a0f.lovable.app-1783972858358.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -94,9 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
+      <head><HeadContent /></head>
       <body>
         {children}
         <Scripts />
@@ -106,6 +90,15 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 function SiteHeader() {
+  const { user } = useSession();
+  const router = useRouter();
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    router.invalidate();
+    router.navigate({ to: "/" });
+  };
+
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
@@ -118,9 +111,17 @@ function SiteHeader() {
         </Link>
         <nav className="flex items-center gap-1 text-sm font-semibold sm:gap-2">
           <NavLink to="/">Home</NavLink>
-          <NavLink to="/words">Word Bank</NavLink>
+          <NavLink to="/words">Words</NavLink>
           <NavLink to="/practice">Practice</NavLink>
+          <NavLink to="/test">Test</NavLink>
           <NavLink to="/my-sentences">My Sentences</NavLink>
+          {user ? (
+            <button onClick={signOut} className="ml-1 rounded-full border-2 border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground/80 shadow-soft hover:bg-secondary">
+              Sign out
+            </button>
+          ) : (
+            <Link to="/auth" className="ml-1 rounded-full bg-primary px-3 py-1.5 text-primary-foreground shadow-soft">Sign in</Link>
+          )}
         </nav>
       </div>
     </header>
@@ -148,8 +149,7 @@ function SiteFooter() {
           Built for the <span className="font-semibold text-foreground">Alphabet Commanders</span> program by{" "}
           <a href="https://www.uskids4water.org/" target="_blank" rel="noreferrer" className="font-semibold text-primary hover:underline">
             US Kids 4 Water
-          </a>
-          .
+          </a>.
         </p>
         <p className="mt-1">Teaching English to Marathi-speaking children in rural India. 🇮🇳</p>
       </div>
@@ -159,15 +159,25 @@ function SiteFooter() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  useEffect(() => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "USER_UPDATED") {
+        router.invalidate();
+        if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+      }
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [router, queryClient]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
         <SiteHeader />
-        <main className="flex-1">
-          <Outlet />
-        </main>
+        <main className="flex-1"><Outlet /></main>
         <SiteFooter />
       </div>
+      <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );
 }
