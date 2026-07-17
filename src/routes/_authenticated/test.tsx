@@ -197,7 +197,7 @@ function TestPage() {
               <li>Do not switch tabs, apps, or windows. Copy/paste is disabled.</li>
               <li>Right-click, spellcheck, autocorrect and Grammarly are blocked.</li>
               <li>Timer: {Math.floor(TIME_LIMIT_SEC/60)} minutes. Auto-submits when time is up.</li>
-              <li>{MAX_VIOLATIONS} warnings = test auto-submits.</li>
+              <li>{MAX_VIOLATIONS} warning = test auto-submits.</li>
             </ul>
           </div>
           <button onClick={startTest}
