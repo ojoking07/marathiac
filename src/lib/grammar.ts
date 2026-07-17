@@ -168,10 +168,35 @@ export function checkGrammar(sentenceRaw: string, targetWord: string): GrammarRe
   if (wc < 4) issues.push({ rule: "too-short", message: "Write at least 4 words.", severity: "error" });
   else passes.push("Has enough words");
 
+  // 7b. Spelling / typo check — every token must be a real English word.
+  const typos: string[] = [];
+  for (const t of toks) {
+    const bare = t.replace(/^['"“”‘’(]+|['"“”‘’)!.,?;:]+$/g, "");
+    if (!bare) continue;
+    // Skip the target word (already validated by rule 6).
+    if (morphMatches(targetWord, bare)) continue;
+    // Skip proper nouns (capitalized, not the first token). First token also OK if capitalized correctly.
+    const idxOf = toks.indexOf(t);
+    if (idxOf > 0 && /^[A-Z]/.test(bare)) continue;
+    if (!isKnownWord(bare)) typos.push(bare);
+  }
+  if (typos.length > 0) {
+    issues.push({
+      rule: "spelling",
+      message: `Spelling: "${typos[0]}" is not a real English word.`,
+      hint: typos.length > 1 ? `Also check: ${typos.slice(1).join(", ")}` : undefined,
+      severity: "error",
+    });
+  } else {
+    passes.push("All words are spelled correctly");
+  }
+
   // 8. Contains a verb
   const hasVerb = toks.some(isVerbToken);
   if (!hasVerb) issues.push({ rule: "no-verb", message: "Your sentence needs an action word (a verb).", hint: "Try is, has, plays, helps, goes, sees…", severity: "error" });
   else passes.push("Has a verb");
+
+
 
   // 9. Repeated adjacent duplicate words: "the the", "is is"
   for (let i = 1; i < toks.length; i++) {
