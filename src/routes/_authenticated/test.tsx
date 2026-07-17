@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 const QUESTION_COUNT = 10;
 const TIME_LIMIT_SEC = 15 * 60; // 15 minutes
-const MAX_VIOLATIONS = 3;
+const MAX_VIOLATIONS = 1;
 
 export const Route = createFileRoute("/_authenticated/test")({
   head: () => ({
