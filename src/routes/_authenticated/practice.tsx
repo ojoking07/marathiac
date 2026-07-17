@@ -118,11 +118,12 @@ function PracticePage() {
               <button onClick={onCheck} disabled={!text.trim()} className="rounded-full bg-accent px-5 py-2 font-bold text-accent-foreground shadow-sun transition hover:scale-[1.03] disabled:opacity-50">
                 ✅ Check my sentence
               </button>
-              <button onClick={onSave} disabled={!text.trim() || result.stars < 3}
-                title={result.stars < 3 ? "Reach 3 stars to save" : "Save"}
+              <button onClick={onSave} disabled={!text.trim() || result.stars < 5}
+                title={result.stars < 5 ? "You need 5/5 stars to save" : "Save"}
                 className="rounded-full bg-primary px-5 py-2 font-bold text-primary-foreground shadow-pop transition hover:scale-[1.03] disabled:opacity-50">
                 💾 Save
               </button>
+
             </div>
           </div>
 
