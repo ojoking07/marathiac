@@ -9,12 +9,40 @@
 // Every rule below only reports an error when the pattern strongly indicates
 // a mistake.
 
+import englishWords from "an-array-of-english-words";
+
+// Dictionary of valid English tokens (lowercased).
+const DICTIONARY: Set<string> = new Set(englishWords as string[]);
+// Extra tokens that a dictionary might miss but are valid in kids' writing.
+const EXTRA_OK = new Set([
+  "i","a","an","ok","okay","yes","no","hi","hello","bye",
+  "mom","mommy","dad","daddy","grandma","grandpa","auntie","uncle",
+]);
+// Common contractions (dictionary lookup happens without apostrophes so we allow both forms).
+const CONTRACTIONS = new Set([
+  "don't","doesn't","didn't","can't","cannot","won't","isn't","aren't","wasn't","weren't",
+  "hasn't","haven't","hadn't","shouldn't","wouldn't","couldn't","mustn't","it's","i'm",
+  "i've","i'll","i'd","you're","you've","you'll","you'd","he's","she's","we're","we've",
+  "we'll","they're","they've","they'll","that's","there's","here's","what's","let's",
+]);
+
+function isKnownWord(tok: string): boolean {
+  const raw = tok.toLowerCase();
+  if (EXTRA_OK.has(raw) || CONTRACTIONS.has(raw)) return true;
+  // Strip surrounding punctuation and trailing 's / '
+  const bare = raw.replace(/^['"“”‘’(]+|['"“”‘’)!.,?;:]+$/g, "").replace(/'s$|s'$/,"");
+  if (!bare) return true;
+  if (/^\d+$/.test(bare)) return true;
+  return DICTIONARY.has(bare) || EXTRA_OK.has(bare);
+}
+
 export interface GrammarIssue {
   rule: string;
   message: string;
   hint?: string;
   severity: "error" | "warning";
 }
+
 
 export interface GrammarResult {
   stars: number;      // 0–5
@@ -140,10 +168,35 @@ export function checkGrammar(sentenceRaw: string, targetWord: string): GrammarRe
   if (wc < 4) issues.push({ rule: "too-short", message: "Write at least 4 words.", severity: "error" });
   else passes.push("Has enough words");
 
+  // 7b. Spelling / typo check — every token must be a real English word.
+  const typos: string[] = [];
+  for (const t of toks) {
+    const bare = t.replace(/^['"“”‘’(]+|['"“”‘’)!.,?;:]+$/g, "");
+    if (!bare) continue;
+    // Skip the target word (already validated by rule 6).
+    if (morphMatches(targetWord, bare)) continue;
+    // Skip proper nouns (capitalized, not the first token). First token also OK if capitalized correctly.
+    const idxOf = toks.indexOf(t);
+    if (idxOf > 0 && /^[A-Z]/.test(bare)) continue;
+    if (!isKnownWord(bare)) typos.push(bare);
+  }
+  if (typos.length > 0) {
+    issues.push({
+      rule: "spelling",
+      message: `Spelling: "${typos[0]}" is not a real English word.`,
+      hint: typos.length > 1 ? `Also check: ${typos.slice(1).join(", ")}` : undefined,
+      severity: "error",
+    });
+  } else {
+    passes.push("All words are spelled correctly");
+  }
+
   // 8. Contains a verb
   const hasVerb = toks.some(isVerbToken);
   if (!hasVerb) issues.push({ rule: "no-verb", message: "Your sentence needs an action word (a verb).", hint: "Try is, has, plays, helps, goes, sees…", severity: "error" });
   else passes.push("Has a verb");
+
+
 
   // 9. Repeated adjacent duplicate words: "the the", "is is"
   for (let i = 1; i < toks.length; i++) {
@@ -279,27 +332,14 @@ export function checkGrammar(sentenceRaw: string, targetWord: string): GrammarRe
 }
 
 // Score a single-word English spelling attempt against the correct word.
+// STRICT: exact match only (case-insensitive, surrounding spaces trimmed). No typo tolerance.
 export function checkSpelling(attempt: string, target: string): { correct: boolean; hint?: string } {
   const a = attempt.trim().toLowerCase();
   const t = target.trim().toLowerCase();
   if (!a) return { correct: false, hint: "You didn't type anything." };
   if (a === t) return { correct: true };
-  // small typo tolerance: 1 edit-distance
-  if (levenshtein(a, t) === 1) return { correct: false, hint: `Very close — the correct spelling is "${target}".` };
   return { correct: false, hint: `The correct English word is "${target}".` };
 }
 
-function levenshtein(a: string, b: string): number {
-  const dp = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
-  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
-  for (let i = 1; i <= a.length; i++) {
-    for (let j = 1; j <= b.length; j++) {
-      dp[i][j] = Math.min(
-        dp[i-1][j] + 1,
-        dp[i][j-1] + 1,
-        dp[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1),
-      );
-    }
-  }
-  return dp[a.length][b.length];
-}
+
+

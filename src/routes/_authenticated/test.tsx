@@ -138,7 +138,7 @@ function TestPage() {
       const spell = checkSpelling(a.english, w.word);
       const gram = a.sentence.trim() ? checkGrammar(a.sentence, w.word) : { stars: 0, issues: [], passes: [], wordCount: 0 };
       const spellingPt = spell.correct ? 1 : 0;
-      const grammarPt = gram.stars >= 3 ? 1 : 0;
+      const grammarPt = gram.stars === 5 ? 1 : 0;
       return {
         word: w,
         english: a.english,
