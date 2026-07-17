@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 const QUESTION_COUNT = 10;
 const TIME_LIMIT_SEC = 15 * 60; // 15 minutes
-const MAX_VIOLATIONS = 3;
+const MAX_VIOLATIONS = 1;
 
 export const Route = createFileRoute("/_authenticated/test")({
   head: () => ({
@@ -197,7 +197,7 @@ function TestPage() {
               <li>Do not switch tabs, apps, or windows. Copy/paste is disabled.</li>
               <li>Right-click, spellcheck, autocorrect and Grammarly are blocked.</li>
               <li>Timer: {Math.floor(TIME_LIMIT_SEC/60)} minutes. Auto-submits when time is up.</li>
-              <li>{MAX_VIOLATIONS} warnings = test auto-submits.</li>
+              <li>{MAX_VIOLATIONS} warning = test auto-submits.</li>
             </ul>
           </div>
           <button onClick={startTest}
