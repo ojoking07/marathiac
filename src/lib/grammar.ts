@@ -9,12 +9,40 @@
 // Every rule below only reports an error when the pattern strongly indicates
 // a mistake.
 
+import englishWords from "an-array-of-english-words";
+
+// Dictionary of valid English tokens (lowercased).
+const DICTIONARY: Set<string> = new Set(englishWords as string[]);
+// Extra tokens that a dictionary might miss but are valid in kids' writing.
+const EXTRA_OK = new Set([
+  "i","a","an","ok","okay","yes","no","hi","hello","bye",
+  "mom","mommy","dad","daddy","grandma","grandpa","auntie","uncle",
+]);
+// Common contractions (dictionary lookup happens without apostrophes so we allow both forms).
+const CONTRACTIONS = new Set([
+  "don't","doesn't","didn't","can't","cannot","won't","isn't","aren't","wasn't","weren't",
+  "hasn't","haven't","hadn't","shouldn't","wouldn't","couldn't","mustn't","it's","i'm",
+  "i've","i'll","i'd","you're","you've","you'll","you'd","he's","she's","we're","we've",
+  "we'll","they're","they've","they'll","that's","there's","here's","what's","let's",
+]);
+
+function isKnownWord(tok: string): boolean {
+  const raw = tok.toLowerCase();
+  if (EXTRA_OK.has(raw) || CONTRACTIONS.has(raw)) return true;
+  // Strip surrounding punctuation and trailing 's / '
+  const bare = raw.replace(/^['"“”‘’(]+|['"“”‘’)!.,?;:]+$/g, "").replace(/'s$|s'$/,"");
+  if (!bare) return true;
+  if (/^\d+$/.test(bare)) return true;
+  return DICTIONARY.has(bare) || EXTRA_OK.has(bare);
+}
+
 export interface GrammarIssue {
   rule: string;
   message: string;
   hint?: string;
   severity: "error" | "warning";
 }
+
 
 export interface GrammarResult {
   stars: number;      // 0–5
