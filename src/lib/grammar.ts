@@ -332,15 +332,15 @@ export function checkGrammar(sentenceRaw: string, targetWord: string): GrammarRe
 }
 
 // Score a single-word English spelling attempt against the correct word.
+// STRICT: exact match only (case-insensitive, surrounding spaces trimmed). No typo tolerance.
 export function checkSpelling(attempt: string, target: string): { correct: boolean; hint?: string } {
   const a = attempt.trim().toLowerCase();
   const t = target.trim().toLowerCase();
   if (!a) return { correct: false, hint: "You didn't type anything." };
   if (a === t) return { correct: true };
-  // small typo tolerance: 1 edit-distance
-  if (levenshtein(a, t) === 1) return { correct: false, hint: `Very close — the correct spelling is "${target}".` };
   return { correct: false, hint: `The correct English word is "${target}".` };
 }
+
 
 function levenshtein(a: string, b: string): number {
   const dp = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
