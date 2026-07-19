@@ -132,7 +132,7 @@ function Home() {
                   <span className="text-xs font-semibold text-muted-foreground">#{w.id}</span>
                 </div>
                 <div className="mt-3 font-display text-3xl font-extrabold text-foreground">{w.word}</div>
-                <div className="text-sm text-muted-foreground">{w.pronunciation} · {w.marathi}</div>
+                <div className="text-sm text-muted-foreground">{w.pronunciation}</div>
                 <p className="mt-2 text-sm text-foreground/80">{w.meaning}</p>
                 <div className="mt-3 text-sm font-semibold text-primary opacity-0 transition group-hover:opacity-100">Practice this word →</div>
               </Link>
