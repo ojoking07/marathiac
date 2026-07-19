@@ -74,7 +74,7 @@ function WordsPage() {
               </div>
               <h3 className="mt-3 font-display text-3xl font-extrabold text-foreground">{w.word}</h3>
               <div className="text-sm font-semibold text-muted-foreground">
-                <span className="text-foreground/70">{w.pronunciation}</span> · {w.marathi}
+                <span className="text-foreground/70">{w.pronunciation}</span>
               </div>
               <p className="mt-2 text-sm text-foreground/85">{w.meaning}</p>
               <blockquote className="mt-3 rounded-2xl bg-secondary/60 p-3 text-sm italic text-foreground/80">
