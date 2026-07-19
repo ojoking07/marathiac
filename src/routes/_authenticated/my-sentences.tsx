@@ -53,7 +53,7 @@ function MySentences() {
                   <div className="flex items-center gap-2">
                     {style && <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold ${style.chip}`}>{style.emoji} {style.label}</span>}
                     <span className="font-display text-xl font-extrabold">{item.word}</span>
-                    {w && <span className="text-sm text-muted-foreground">· {w.marathi}</span>}
+                    {w && <span className="text-sm text-muted-foreground">· {w.pronunciation}</span>}
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="text-lg leading-none">
