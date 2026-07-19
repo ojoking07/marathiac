@@ -92,7 +92,7 @@ function PracticePage() {
           <div className="mt-5 animate-pop-in" key={current.id}>
             <h1 className="font-display text-6xl font-extrabold sm:text-7xl">{current.word}</h1>
             <div className="mt-1 text-lg font-semibold text-muted-foreground">
-              <span className="text-foreground/80">{current.pronunciation}</span> · {current.marathi}
+              <span className="text-foreground/80">{current.pronunciation}</span>
             </div>
             <p className="mt-3 text-lg">{current.meaning}</p>
             <details className="mt-3">

@@ -322,6 +322,57 @@ export function checkGrammar(sentenceRaw: string, targetWord: string): GrammarRe
     }
   }
 
+  // 17. Stranded / dangling preposition at end of sentence.
+  //     Standard English word order in a declarative sentence doesn't leave a
+  //     preposition hanging with no object (e.g. "Courage I have lots of.").
+  //     "to" is allowed at the end because of common infinitive constructions
+  //     ("something I want to").
+  const lastToken = lowerToks[lowerToks.length - 1];
+  if (lastToken && PREPOSITIONS.has(lastToken) && lastToken !== "to") {
+    issues.push({
+      rule: "stranded-preposition",
+      message: `Sentence should not end with the preposition "${lastToken}".`,
+      hint: "Rewrite so the preposition has an object, e.g. \"I have lots of courage.\"",
+      severity: "error",
+    });
+  }
+
+  // 18. Object-fronting / non-standard word order.
+  //     Pattern: sentence starts with a bare noun-phrase (no article/determiner,
+  //     not a subject pronoun, not a question word), followed by a subject
+  //     pronoun + verb — e.g. "Courage I have." — which is Yoda-style inversion
+  //     rather than standard English SVO order.
+  const DETERMINERS = new Set([
+    "the","a","an","this","that","these","those","my","your","his","her",
+    "its","our","their","some","any","many","much","few","several","all",
+    "each","every","no","one","two","three","four","five","six","seven",
+    "eight","nine","ten",
+  ]);
+  const QUESTION_WORDS = new Set(["what","who","whom","whose","which","where","when","why","how"]);
+  const CONJUNCTIONS_START = new Set(["and","but","or","so","because","although","though","if","when","while","after","before"]);
+  const first0 = lowerToks[0];
+  const second = lowerToks[1];
+  const third  = lowerToks[2];
+  if (
+    first0 && second && third &&
+    !DETERMINERS.has(first0) &&
+    !SUBJECT_PRONOUNS.has(first0) &&
+    !OBJECT_PRONOUNS.has(first0) &&
+    !QUESTION_WORDS.has(first0) &&
+    !CONJUNCTIONS_START.has(first0) &&
+    !PREPOSITIONS.has(first0) &&
+    !isVerbToken(first0) &&
+    SUBJECT_PRONOUNS.has(second) &&
+    isVerbToken(third)
+  ) {
+    issues.push({
+      rule: "word-order",
+      message: `Non-standard word order: "${toks[0]} ${toks[1]} ${toks[2]}…".`,
+      hint: `English usually goes Subject → Verb → Object. Try starting with "${toks[1]}".`,
+      severity: "error",
+    });
+  }
+
   // ---- Scoring: 5 stars if no errors, minus 1 per unique error category, warnings −0.5 (rounded).
   const errorCats = new Set(issues.filter(i => i.severity === "error").map(i => i.rule));
   const warnCats  = new Set(issues.filter(i => i.severity === "warning").map(i => i.rule));
