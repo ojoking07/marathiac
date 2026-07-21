@@ -24,7 +24,7 @@ function WordsPage() {
     .filter(w => {
       if (!q.trim()) return true;
       const s = q.toLowerCase();
-      return w.word.toLowerCase().includes(s) || w.marathi.includes(q) || w.meaning.toLowerCase().includes(s);
+      return w.word.toLowerCase().includes(s) || w.pronunciation.includes(q) || w.meaning.toLowerCase().includes(s);
     });
 
   return (
