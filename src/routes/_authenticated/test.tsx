@@ -232,7 +232,7 @@ function TestPage() {
             <li key={i} className="rounded-3xl bg-card p-5 shadow-soft">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <div className="text-lg font-semibold text-muted-foreground">{r.word.marathi}</div>
+                  <div className="text-lg font-semibold text-muted-foreground">{r.word.pronunciation}</div>
                   <div className="font-display text-2xl font-extrabold">{r.word.word}</div>
                 </div>
                 <div className="rounded-full bg-primary/10 px-3 py-1 font-bold text-primary">{r.points}/2</div>
@@ -290,9 +290,9 @@ function TestPage() {
           </div>
         </div>
 
-        <div className="rounded-3xl bg-card p-6 shadow-pop">
-          <div className="text-sm font-bold text-muted-foreground">Marathi</div>
-          <div className="mt-1 font-display text-5xl font-extrabold">{w.marathi}</div>
+          <div className="rounded-3xl bg-card p-6 shadow-pop">
+          <div className="text-sm font-bold text-muted-foreground">Pronunciation</div>
+          <div className="mt-1 font-display text-3xl font-extrabold">{w.pronunciation}</div>
 
           <label className="mt-6 block">
             <span className="text-sm font-bold">1. Write this in English</span>
