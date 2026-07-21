@@ -164,7 +164,7 @@ function TestPage() {
           user_id: user.user.id,
           score, max_score: maxScore,
           details: results.map(r => ({
-            word: r.word.word, marathi: r.word.marathi, english: r.english,
+            word: r.word.word, pronunciation: r.word.pronunciation, english: r.english,
             sentence: r.sentence, spelling_correct: r.spellingCorrect,
             grammar_stars: r.grammarStars, points: r.points, issues: r.grammarIssues,
           })),
