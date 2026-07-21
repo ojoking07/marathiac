@@ -71,17 +71,17 @@ function Home() {
               <div className="absolute left-4 top-6 w-44 rotate-[-8deg] rounded-2xl bg-card p-4 shadow-pop">
                 <div className="text-xs font-bold uppercase text-coral">Verb</div>
                 <div className="font-display text-2xl font-extrabold">Discover</div>
-                <div className="text-sm text-muted-foreground">डिस्कव्हर · शोधणे</div>
+                <div className="text-sm text-muted-foreground">डिस्कव्हर</div>
               </div>
               <div className="absolute bottom-6 right-2 w-48 rotate-[6deg] rounded-2xl bg-card p-4 shadow-pop">
                 <div className="text-xs font-bold uppercase text-sun-foreground">Adjective</div>
                 <div className="font-display text-2xl font-extrabold">Curious</div>
-                <div className="text-sm text-muted-foreground">क्युरिअस · जिज्ञासू</div>
+                <div className="text-sm text-muted-foreground">क्युरिअस</div>
               </div>
               <div className="absolute bottom-24 left-0 w-40 rotate-[4deg] rounded-2xl bg-card p-4 shadow-pop">
                 <div className="text-xs font-bold uppercase text-leaf-foreground">Adverb</div>
                 <div className="font-display text-2xl font-extrabold">Together</div>
-                <div className="text-sm text-muted-foreground">टुगेदर · एकत्र</div>
+                <div className="text-sm text-muted-foreground">टुगेदर</div>
               </div>
             </div>
           </div>
