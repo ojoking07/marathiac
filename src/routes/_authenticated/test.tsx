@@ -133,51 +133,43 @@ function TestPage() {
     if (submittedRef.current) return;
     submittedRef.current = true;
 
-    const results: Scored[] = words.map((w, i) => {
-      const a = answers[i];
-      const spell = checkSpelling(a.english, w.word);
-      const gram = a.sentence.trim() ? checkGrammar(a.sentence, w.word) : { stars: 0, issues: [], passes: [], wordCount: 0 };
-      const spellingPt = spell.correct ? 1 : 0;
-      const grammarPt = gram.stars === 5 ? 1 : 0;
-      return {
-        word: w,
-        english: a.english,
-        sentence: a.sentence,
-        spellingCorrect: spell.correct,
-        spellingHint: spell.hint,
-        grammarStars: gram.stars,
-        grammarIssues: gram.issues.map(x => x.message),
-        points: spellingPt + grammarPt,
-      };
-    });
-    setScored(results);
     setStage("done");
     if (document.fullscreenElement) { document.exitFullscreen().catch(()=>{}); }
 
-    const score = results.reduce((s, r) => s + r.points, 0);
-    const maxScore = results.length * 2;
-
     try {
-      const { data: user } = await supabase.auth.getUser();
-      if (user.user) {
-        await supabase.from("test_attempts").insert({
-          user_id: user.user.id,
-          score, max_score: maxScore,
-          details: results.map(r => ({
-            word: r.word.word, pronunciation: r.word.pronunciation, english: r.english,
-            sentence: r.sentence, spelling_correct: r.spellingCorrect,
-            grammar_stars: r.grammarStars, points: r.points, issues: r.grammarIssues,
+      // Scoring happens on the server — the browser only sends raw answers.
+      const res = await submitAttempt({
+        data: {
+          answers: words.map((w, i) => ({
+            wordId: w.id,
+            english: answers[i]?.english ?? "",
+            sentence: answers[i]?.sentence ?? "",
           })),
-          integrity: { violations, duration_used: TIME_LIMIT_SEC - timeLeft },
-          duration_sec: TIME_LIMIT_SEC - timeLeft,
-        });
-        for (const r of results) {
-          await recordAttempt(r.word.id, r.grammarStars, { spellingCorrect: r.spellingCorrect });
-        }
-        qc.invalidateQueries({ queryKey: ["progress"] });
+          violations,
+          durationSec: TIME_LIMIT_SEC - timeLeft,
+        },
+      });
+
+      const byId = new Map(words.map(w => [w.id, w]));
+      const results: Scored[] = res.results.map(r => ({
+        word: byId.get(r.wordId)!,
+        english: r.english,
+        sentence: r.sentence,
+        spellingCorrect: r.spellingCorrect,
+        ...(r.spellingHint ? { spellingHint: r.spellingHint } : {}),
+        grammarStars: r.grammarStars,
+        grammarIssues: r.grammarIssues,
+        points: r.points,
+      }));
+      setScored(results);
+
+      for (const r of results) {
+        await recordAttempt(r.word.id, r.grammarStars, { spellingCorrect: r.spellingCorrect });
       }
+      qc.invalidateQueries({ queryKey: ["progress"] });
     } catch (e) {
       console.error(e);
+      toast.error("We couldn't score your test. Please try again.");
     }
   };
 
