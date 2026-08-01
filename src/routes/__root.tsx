@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { useSession } from "../lib/session";
 import { supabase } from "@/integrations/supabase/client";
+import { isAdmin } from "@/lib/meanings";
 
 function NotFoundComponent() {
   return (
@@ -92,6 +93,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function SiteHeader() {
   const { user } = useSession();
   const router = useRouter();
+  const { data: admin } = useQuery({ queryKey: ["is-admin", user?.id ?? null], queryFn: isAdmin, enabled: !!user });
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -115,6 +117,8 @@ function SiteHeader() {
           <NavLink to="/practice">Practice</NavLink>
           <NavLink to="/test">Test</NavLink>
           <NavLink to="/my-sentences">My Sentences</NavLink>
+          <NavLink to="/my-meanings">My Meanings</NavLink>
+          {admin && <NavLink to="/admin/meanings">Review</NavLink>}
           {user ? (
             <button onClick={signOut} className="ml-1 rounded-full border-2 border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground/80 shadow-soft hover:bg-secondary">
               Sign out

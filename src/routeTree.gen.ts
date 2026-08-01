@@ -17,6 +17,7 @@ import { Route as AuthenticatedTestRouteImport } from './routes/_authenticated/t
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as AuthenticatedMySentencesRouteImport } from './routes/_authenticated/my-sentences'
 import { Route as AuthenticatedMyMeaningsRouteImport } from './routes/_authenticated/my-meanings'
+import { Route as AuthenticatedAdminMeaningsRouteImport } from './routes/_authenticated/admin/meanings'
 
 const WordsRoute = WordsRouteImport.update({
   id: '/words',
@@ -58,6 +59,12 @@ const AuthenticatedMyMeaningsRoute = AuthenticatedMyMeaningsRouteImport.update({
   path: '/my-meanings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminMeaningsRoute =
+  AuthenticatedAdminMeaningsRouteImport.update({
+    id: '/admin/meanings',
+    path: '/admin/meanings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/my-sentences': typeof AuthenticatedMySentencesRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/test': typeof AuthenticatedTestRoute
+  '/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,6 +84,7 @@ export interface FileRoutesByTo {
   '/my-sentences': typeof AuthenticatedMySentencesRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/test': typeof AuthenticatedTestRoute
+  '/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,6 +96,7 @@ export interface FileRoutesById {
   '/_authenticated/my-sentences': typeof AuthenticatedMySentencesRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/_authenticated/test': typeof AuthenticatedTestRoute
+  '/_authenticated/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/my-sentences'
     | '/practice'
     | '/test'
+    | '/admin/meanings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/my-sentences'
     | '/practice'
     | '/test'
+    | '/admin/meanings'
   id:
     | '__root__'
     | '/'
@@ -117,6 +129,7 @@ export interface FileRouteTypes {
     | '/_authenticated/my-sentences'
     | '/_authenticated/practice'
     | '/_authenticated/test'
+    | '/_authenticated/admin/meanings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMyMeaningsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/meanings': {
+      id: '/_authenticated/admin/meanings'
+      path: '/admin/meanings'
+      fullPath: '/admin/meanings'
+      preLoaderRoute: typeof AuthenticatedAdminMeaningsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -192,6 +212,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMySentencesRoute: typeof AuthenticatedMySentencesRoute
   AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
   AuthenticatedTestRoute: typeof AuthenticatedTestRoute
+  AuthenticatedAdminMeaningsRoute: typeof AuthenticatedAdminMeaningsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -199,6 +220,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMySentencesRoute: AuthenticatedMySentencesRoute,
   AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
   AuthenticatedTestRoute: AuthenticatedTestRoute,
+  AuthenticatedAdminMeaningsRoute: AuthenticatedAdminMeaningsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
