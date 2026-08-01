@@ -14,6 +14,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SentencesDailyUseRouteImport } from './routes/sentences.daily-use'
 import { Route as AuthenticatedTestRouteImport } from './routes/_authenticated/test'
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as AuthenticatedMySentencesRouteImport } from './routes/_authenticated/my-sentences'
@@ -42,6 +43,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SentencesDailyUseRoute = SentencesDailyUseRouteImport.update({
+  id: '/sentences/daily-use',
+  path: '/sentences/daily-use',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedTestRoute = AuthenticatedTestRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/my-sentences': typeof AuthenticatedMySentencesRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/test': typeof AuthenticatedTestRoute
+  '/sentences/daily-use': typeof SentencesDailyUseRoute
   '/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
 }
 export interface FileRoutesByTo {
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/my-sentences': typeof AuthenticatedMySentencesRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/test': typeof AuthenticatedTestRoute
+  '/sentences/daily-use': typeof SentencesDailyUseRoute
   '/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
 }
 export interface FileRoutesById {
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/_authenticated/my-sentences': typeof AuthenticatedMySentencesRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/_authenticated/test': typeof AuthenticatedTestRoute
+  '/sentences/daily-use': typeof SentencesDailyUseRoute
   '/_authenticated/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
 }
 export interface FileRouteTypes {
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/my-sentences'
     | '/practice'
     | '/test'
+    | '/sentences/daily-use'
     | '/admin/meanings'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/my-sentences'
     | '/practice'
     | '/test'
+    | '/sentences/daily-use'
     | '/admin/meanings'
   id:
     | '__root__'
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/_authenticated/my-sentences'
     | '/_authenticated/practice'
     | '/_authenticated/test'
+    | '/sentences/daily-use'
     | '/_authenticated/admin/meanings'
   fileRoutesById: FileRoutesById
 }
@@ -150,6 +162,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WordsRoute: typeof WordsRoute
+  SentencesDailyUseRoute: typeof SentencesDailyUseRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sentences/daily-use': {
+      id: '/sentences/daily-use'
+      path: '/sentences/daily-use'
+      fullPath: '/sentences/daily-use'
+      preLoaderRoute: typeof SentencesDailyUseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/test': {
@@ -252,6 +272,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   WordsRoute: WordsRoute,
+  SentencesDailyUseRoute: SentencesDailyUseRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

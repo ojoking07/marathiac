@@ -9,7 +9,12 @@ export const Route = createFileRoute("/auth")({
     meta: [
       { title: "Sign in | Alphabet Commanders" },
       { name: "description", content: "Sign in or create a student account to save your English progress." },
+      { property: "og:title", content: "Sign in to Alphabet Commanders" },
+      { property: "og:description", content: "Create a free student account to practise English sentences and save your stars." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://marathiac.lovable.app/auth" },
     ],
+    links: [{ rel: "canonical", href: "https://marathiac.lovable.app/auth" }],
   }),
   component: AuthPage,
 });
