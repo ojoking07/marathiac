@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTestRouteImport } from './routes/_authenticated/test'
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as AuthenticatedMySentencesRouteImport } from './routes/_authenticated/my-sentences'
+import { Route as AuthenticatedMyMeaningsRouteImport } from './routes/_authenticated/my-meanings'
 
 const WordsRoute = WordsRouteImport.update({
   id: '/words',
@@ -52,11 +53,17 @@ const AuthenticatedMySentencesRoute =
     path: '/my-sentences',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedMyMeaningsRoute = AuthenticatedMyMeaningsRouteImport.update({
+  id: '/my-meanings',
+  path: '/my-meanings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/words': typeof WordsRoute
+  '/my-meanings': typeof AuthenticatedMyMeaningsRoute
   '/my-sentences': typeof AuthenticatedMySentencesRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/test': typeof AuthenticatedTestRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/words': typeof WordsRoute
+  '/my-meanings': typeof AuthenticatedMyMeaningsRoute
   '/my-sentences': typeof AuthenticatedMySentencesRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/test': typeof AuthenticatedTestRoute
@@ -75,21 +83,37 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/words': typeof WordsRoute
+  '/_authenticated/my-meanings': typeof AuthenticatedMyMeaningsRoute
   '/_authenticated/my-sentences': typeof AuthenticatedMySentencesRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/_authenticated/test': typeof AuthenticatedTestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/words' | '/my-sentences' | '/practice' | '/test'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/words'
+    | '/my-meanings'
+    | '/my-sentences'
+    | '/practice'
+    | '/test'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/words' | '/my-sentences' | '/practice' | '/test'
+  to:
+    | '/'
+    | '/auth'
+    | '/words'
+    | '/my-meanings'
+    | '/my-sentences'
+    | '/practice'
+    | '/test'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/words'
+    | '/_authenticated/my-meanings'
     | '/_authenticated/my-sentences'
     | '/_authenticated/practice'
     | '/_authenticated/test'
@@ -153,16 +177,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMySentencesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/my-meanings': {
+      id: '/_authenticated/my-meanings'
+      path: '/my-meanings'
+      fullPath: '/my-meanings'
+      preLoaderRoute: typeof AuthenticatedMyMeaningsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedMyMeaningsRoute: typeof AuthenticatedMyMeaningsRoute
   AuthenticatedMySentencesRoute: typeof AuthenticatedMySentencesRoute
   AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
   AuthenticatedTestRoute: typeof AuthenticatedTestRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedMyMeaningsRoute: AuthenticatedMyMeaningsRoute,
   AuthenticatedMySentencesRoute: AuthenticatedMySentencesRoute,
   AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
   AuthenticatedTestRoute: AuthenticatedTestRoute,
