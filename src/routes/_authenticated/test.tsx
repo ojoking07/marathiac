@@ -15,8 +15,12 @@ const MAX_VIOLATIONS = 1;
 export const Route = createFileRoute("/_authenticated/test")({
   head: () => ({
     meta: [
-      { title: "Test | Alphabet Commanders" },
-      { name: "description", content: "Timed English test with lockdown mode and automatic scoring." },
+      { title: "English Vocabulary Test | Alphabet Commanders" },
+      { name: "description", content: "Timed English vocabulary and sentence test with lockdown mode and automatic scoring." },
+      { property: "og:title", content: "English Vocabulary Test — Alphabet Commanders" },
+      { property: "og:description", content: "A timed, automatically scored English word and sentence test in lockdown mode." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://marathiac.lovable.app/test" },
     ],
   }),
   component: TestPage,

@@ -12,6 +12,8 @@ export const Route = createFileRoute("/_authenticated/my-meanings")({
       { name: "description", content: "Write your own Marathi meaning for each English word. Your meanings are private to you." },
       { property: "og:title", content: "My Marathi Meanings — Alphabet Commanders" },
       { property: "og:description", content: "Every student writes their own Marathi meaning for each English word." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://marathiac.lovable.app/my-meanings" },
     ],
   }),
   component: MyMeanings,
