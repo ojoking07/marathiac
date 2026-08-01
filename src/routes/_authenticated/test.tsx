@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { listProgress, pickTestWords, recordAttempt } from "@/lib/progress";
 import { WORDS, type WordEntry } from "@/lib/words";
-import { checkGrammar, checkSpelling } from "@/lib/grammar";
+import { submitTestAttempt } from "@/lib/test-scoring.functions";
 import { NoAssistInput, NoAssistTextarea } from "@/components/NoAssistTextarea";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const QUESTION_COUNT = 10;
@@ -37,6 +37,7 @@ interface Scored {
 function TestPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const submitAttempt = useServerFn(submitTestAttempt);
   const { data: progress } = useQuery({ queryKey: ["progress"], queryFn: listProgress });
 
   const [stage, setStage] = useState<"intro" | "active" | "done">("intro");
