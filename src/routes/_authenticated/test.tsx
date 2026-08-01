@@ -279,6 +279,7 @@ function TestPage() {
       </div>
 
       <div className="mx-auto max-w-2xl px-4 py-8">
+        <h1 className="sr-only">English vocabulary and sentence test</h1>
         <div className="mb-4 flex items-center justify-between text-sm text-muted-foreground">
           <span className="font-bold">Question {idx + 1} of {words.length}</span>
           <div className="flex gap-1">
