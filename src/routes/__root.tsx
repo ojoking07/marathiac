@@ -143,6 +143,7 @@ function SiteHeader() {
         <nav className="flex items-center gap-1 text-sm font-semibold sm:gap-2">
           <NavLink to="/">Home</NavLink>
           <NavLink to="/words">Words</NavLink>
+          <NavLink to="/sentences/daily-use">Daily Sentences</NavLink>
           <NavLink to="/practice">Practice</NavLink>
           <NavLink to="/test">Test</NavLink>
           <NavLink to="/my-sentences">My Sentences</NavLink>
