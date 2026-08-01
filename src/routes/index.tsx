@@ -1,7 +1,26 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { WORDS, GRAMMAR_STYLES } from "@/lib/words";
 
+const HOME_URL = "https://marathiac.lovable.app/";
+const OG_IMAGE = "https://marathiac.lovable.app/og-image.jpg";
+const HOME_TITLE = "Alphabet Commanders — Learn English Sentences in Marathi";
+const HOME_DESCRIPTION =
+  "Free English sentence practice for Marathi-speaking children: 30 Level 1 words with Marathi pronunciation, instant grammar feedback and a scored vocabulary test.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: HOME_TITLE },
+      { name: "description", content: HOME_DESCRIPTION },
+      { property: "og:title", content: HOME_TITLE },
+      { property: "og:description", content: HOME_DESCRIPTION },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: HOME_URL },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [{ rel: "canonical", href: HOME_URL }],
+  }),
   component: Home,
 });
 

@@ -7,7 +7,11 @@ export const Route = createFileRoute("/_authenticated/my-sentences")({
   head: () => ({
     meta: [
       { title: "My Sentences | Alphabet Commanders" },
-      { name: "description", content: "Your saved English sentences with star ratings." },
+      { name: "description", content: "Review and manage your saved English sentences, track your star ratings, and see your writing progress in the Alphabet Commanders program." },
+      { property: "og:title", content: "My Sentences — Alphabet Commanders" },
+      { property: "og:description", content: "Your personal journal of English sentences and the stars you earned for each one." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://marathiac.lovable.app/my-sentences" },
     ],
   }),
   component: MySentences,

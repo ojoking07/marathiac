@@ -7,8 +7,38 @@ export const Route = createFileRoute("/words")({
     meta: [
       { title: "Word Bank — 30 Level 1 Words | Alphabet Commanders" },
       { name: "description", content: "Browse all 30 Level 1 words with Marathi pronunciation, meaning, grammar, and example sentences." },
-      { property: "og:title", content: "Word Bank — Alphabet Commanders" },
-      { property: "og:description", content: "30 English words with Marathi meanings for children in rural India." },
+      { property: "og:title", content: "Word Bank — 30 English Words with Marathi Pronunciation" },
+      { property: "og:description", content: "30 English words with Marathi pronunciation, part of speech and example sentences for children in rural India." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://marathiac.lovable.app/words" },
+      { property: "og:image", content: "https://marathiac.lovable.app/og-image.jpg" },
+      { name: "twitter:image", content: "https://marathiac.lovable.app/og-image.jpg" },
+    ],
+    links: [{ rel: "canonical", href: "https://marathiac.lovable.app/words" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Word Bank — 30 Level 1 Words",
+          description:
+            "All 30 Level 1 English words of the Alphabet Commanders program with Marathi pronunciation, part of speech and example sentences.",
+          url: "https://marathiac.lovable.app/words",
+          inLanguage: ["en", "mr"],
+          isPartOf: { "@id": "https://marathiac.lovable.app/#website" },
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: WORDS.length,
+            itemListElement: WORDS.map((w, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: w.word,
+              description: w.meaning,
+            })),
+          },
+        }),
+      },
     ],
   }),
   component: WordsPage,

@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /auth
+Disallow: /practice
+Disallow: /my-sentences
+Disallow: /my-meanings
+Disallow: /test
+Disallow: /admin
+
+Sitemap: https://marathiac.lovable.app/sitemap.xml

@@ -62,6 +62,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Alphabet Commanders — Sentence Practice" },
       { property: "og:description", content: "Learn English one sentence at a time. Marathi Alphabet Commanders program." },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Alphabet Commanders" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
@@ -70,6 +71,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://marathiac.lovable.app/#organization",
+              name: "US Kids 4 Water",
+              url: "https://www.uskids4water.org/",
+              description:
+                "A youth-led nonprofit bringing clean water and English education to rural villages in India.",
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://marathiac.lovable.app/#website",
+              name: "Alphabet Commanders",
+              url: "https://marathiac.lovable.app",
+              inLanguage: ["en", "mr"],
+              description:
+                "Sentence-building and testing practice for Marathi-speaking children learning English.",
+              publisher: { "@id": "https://marathiac.lovable.app/#organization" },
+            },
+          ],
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -114,6 +143,7 @@ function SiteHeader() {
         <nav className="flex items-center gap-1 text-sm font-semibold sm:gap-2">
           <NavLink to="/">Home</NavLink>
           <NavLink to="/words">Words</NavLink>
+          <NavLink to="/sentences/daily-use">Daily Sentences</NavLink>
           <NavLink to="/practice">Practice</NavLink>
           <NavLink to="/test">Test</NavLink>
           <NavLink to="/my-sentences">My Sentences</NavLink>

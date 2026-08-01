@@ -17,7 +17,11 @@ export const Route = createFileRoute("/_authenticated/practice")({
   head: () => ({
     meta: [
       { title: "Practice | Alphabet Commanders" },
-      { name: "description", content: "Write your own English sentence and get instant grammar feedback." },
+      { name: "description", content: "Write your own English sentence for each word and get instant grammar feedback with a five-star rating." },
+      { property: "og:title", content: "Sentence Practice — Alphabet Commanders" },
+      { property: "og:description", content: "Pick a word, write a sentence, and get instant grammar feedback and stars." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://marathiac.lovable.app/practice" },
     ],
   }),
   component: PracticePage,

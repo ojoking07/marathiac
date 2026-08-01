@@ -15,8 +15,12 @@ const MAX_VIOLATIONS = 1;
 export const Route = createFileRoute("/_authenticated/test")({
   head: () => ({
     meta: [
-      { title: "Test | Alphabet Commanders" },
-      { name: "description", content: "Timed English test with lockdown mode and automatic scoring." },
+      { title: "English Vocabulary Test | Alphabet Commanders" },
+      { name: "description", content: "Timed English vocabulary and sentence test with lockdown mode and automatic scoring." },
+      { property: "og:title", content: "English Vocabulary Test — Alphabet Commanders" },
+      { property: "og:description", content: "A timed, automatically scored English word and sentence test in lockdown mode." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://marathiac.lovable.app/test" },
     ],
   }),
   component: TestPage,
@@ -211,7 +215,8 @@ function TestPage() {
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="rounded-3xl bg-gradient-hero p-8 shadow-pop text-center">
           <div className="text-6xl">{pct >= 80 ? "🏆" : pct >= 60 ? "🎉" : "💪"}</div>
-          <h1 className="mt-3 font-display text-5xl font-extrabold">{total} / {max}</h1>
+          <h1 className="mt-3 font-display text-3xl font-extrabold">Your test results</h1>
+          <p className="mt-2 font-display text-5xl font-extrabold">{total} / {max}</p>
           <p className="text-lg font-semibold text-muted-foreground">{pct}%</p>
           {violations.length > 0 && (
             <p className="mt-2 rounded-full bg-destructive/10 px-3 py-1 text-xs font-bold text-destructive inline-block">
@@ -274,6 +279,7 @@ function TestPage() {
       </div>
 
       <div className="mx-auto max-w-2xl px-4 py-8">
+        <h1 className="sr-only">English vocabulary and sentence test</h1>
         <div className="mb-4 flex items-center justify-between text-sm text-muted-foreground">
           <span className="font-bold">Question {idx + 1} of {words.length}</span>
           <div className="flex gap-1">

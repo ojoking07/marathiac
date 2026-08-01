@@ -9,7 +9,12 @@ export const Route = createFileRoute("/auth")({
     meta: [
       { title: "Sign in | Alphabet Commanders" },
       { name: "description", content: "Sign in or create a student account to save your English progress." },
+      { property: "og:title", content: "Sign in to Alphabet Commanders" },
+      { property: "og:description", content: "Create a free student account to practise English sentences and save your stars." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://marathiac.lovable.app/auth" },
     ],
+    links: [{ rel: "canonical", href: "https://marathiac.lovable.app/auth" }],
   }),
   component: AuthPage,
 });
@@ -64,7 +69,9 @@ function AuthPage() {
       <div className="w-full rounded-3xl bg-card p-6 shadow-pop sm:p-8">
         <div className="text-center">
           <div className="text-4xl">🌊</div>
-          <h1 className="mt-2 font-display text-3xl font-extrabold">Alphabet Commanders</h1>
+          <h1 className="mt-2 font-display text-3xl font-extrabold">
+            {mode === "signin" ? "Sign in to Alphabet Commanders" : "Create your Alphabet Commanders account"}
+          </h1>
           <p className="text-sm text-muted-foreground">
             {mode === "signin" ? "Sign in to keep your progress." : "Create a student account."}
           </p>
