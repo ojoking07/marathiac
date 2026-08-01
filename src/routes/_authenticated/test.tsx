@@ -152,7 +152,7 @@ function TestPage() {
       });
 
       const byId = new Map(words.map(w => [w.id, w]));
-      const results: Scored[] = res.results.map(r => ({
+      const results: Scored[] = res.results.map((r: ScoredAnswer) => ({
         word: byId.get(r.wordId)!,
         english: r.english,
         sentence: r.sentence,
