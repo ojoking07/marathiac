@@ -215,7 +215,8 @@ function TestPage() {
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="rounded-3xl bg-gradient-hero p-8 shadow-pop text-center">
           <div className="text-6xl">{pct >= 80 ? "🏆" : pct >= 60 ? "🎉" : "💪"}</div>
-          <h1 className="mt-3 font-display text-5xl font-extrabold">{total} / {max}</h1>
+          <h1 className="mt-3 font-display text-3xl font-extrabold">Your test results</h1>
+          <p className="mt-2 font-display text-5xl font-extrabold">{total} / {max}</p>
           <p className="text-lg font-semibold text-muted-foreground">{pct}%</p>
           {violations.length > 0 && (
             <p className="mt-2 rounded-full bg-destructive/10 px-3 py-1 text-xs font-bold text-destructive inline-block">

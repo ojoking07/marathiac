@@ -69,7 +69,9 @@ function AuthPage() {
       <div className="w-full rounded-3xl bg-card p-6 shadow-pop sm:p-8">
         <div className="text-center">
           <div className="text-4xl">🌊</div>
-          <h1 className="mt-2 font-display text-3xl font-extrabold">Alphabet Commanders</h1>
+          <h1 className="mt-2 font-display text-3xl font-extrabold">
+            {mode === "signin" ? "Sign in to Alphabet Commanders" : "Create your Alphabet Commanders account"}
+          </h1>
           <p className="text-sm text-muted-foreground">
             {mode === "signin" ? "Sign in to keep your progress." : "Create a student account."}
           </p>
