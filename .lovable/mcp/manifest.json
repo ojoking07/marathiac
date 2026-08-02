@@ -1,0 +1,208 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://taiiwyrxyccpzzktstro.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "alphabet-commanders",
+      "version": "0.1.0",
+      "title": "Alphabet Commanders"
+    },
+    "tools": [
+      {
+        "name": "list_words",
+        "title": "List Level 1 words",
+        "description": "List the 30 Level 1 Alphabet Commanders words with Marathi pronunciation, part of speech, meaning and an example sentence.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "grammar": {
+              "type": "string",
+              "enum": [
+                "Noun",
+                "Verb",
+                "Adjective",
+                "Adverb"
+              ],
+              "description": "Optionally filter by part of speech."
+            },
+            "search": {
+              "type": "string",
+              "description": "Optional text match on the English word."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "check_sentence",
+        "title": "Check a sentence",
+        "description": "Run the app's strict English grammar and spelling checker on a sentence that uses a target word. Returns a 0-5 star score and the issues found.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sentence": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The English sentence to check."
+            },
+            "word": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The target word the sentence must use."
+            }
+          },
+          "required": [
+            "sentence",
+            "word"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_my_sentences",
+        "title": "List my saved sentences",
+        "description": "List the signed-in student's saved practice sentences with their star scores.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "description": "Maximum number of sentences to return (default 50)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "save_sentence",
+        "title": "Save a practice sentence",
+        "description": "Score a sentence with the app's grammar checker and save it to the signed-in student's journal. Only perfect 5/5 sentences are saved.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "word": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The Level 1 word used in the sentence."
+            },
+            "sentence": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The student's English sentence."
+            }
+          },
+          "required": [
+            "word",
+            "sentence"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_my_meanings",
+        "title": "List my Marathi meanings",
+        "description": "List the signed-in student's own private Marathi meanings for the Level 1 words.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "word": {
+              "type": "string",
+              "description": "Optionally return only this English word's meaning."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "set_my_meaning",
+        "title": "Save my Marathi meaning",
+        "description": "Save or update the signed-in student's own private Marathi meaning for a Level 1 word. An empty meaning removes it.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "word": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The Level 1 English word."
+            },
+            "meaning": {
+              "type": "string",
+              "description": "The student's Marathi meaning. Empty string deletes it."
+            }
+          },
+          "required": [
+            "word",
+            "meaning"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_my_progress",
+        "title": "Get my progress",
+        "description": "Summarize the signed-in student's word progress and recent test attempts (scores, duration, dates).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

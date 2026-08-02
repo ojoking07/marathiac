@@ -5,6 +5,12 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
+  validateSearch: (s: Record<string, unknown>): { next?: string } => {
+    const next = typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : undefined;
+    return next ? { next } : {};
+  },
+
+
   head: () => ({
     meta: [
       { title: "Sign in | Alphabet Commanders" },
@@ -29,6 +35,8 @@ const signUpSchema = z.object({
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
+
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,7 +57,7 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email, password,
           options: {
-            emailRedirectTo: `${window.location.origin}/practice`,
+            emailRedirectTo: `${window.location.origin}${next ?? "/practice"}`,
             data: { name, grade, village },
           },
         });
@@ -58,7 +66,9 @@ function AuthPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) { setErr(error.message); return; }
       }
+      if (next) { window.location.href = next; return; }
       navigate({ to: "/practice" });
+
     } finally {
       setBusy(false);
     }
