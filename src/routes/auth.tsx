@@ -55,7 +55,7 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email, password,
           options: {
-            emailRedirectTo: `${window.location.origin}/practice`,
+            emailRedirectTo: `${window.location.origin}${next ?? "/practice"}`,
             data: { name, grade, village },
           },
         });
@@ -64,7 +64,9 @@ function AuthPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) { setErr(error.message); return; }
       }
+      if (next) { window.location.href = next; return; }
       navigate({ to: "/practice" });
+
     } finally {
       setBusy(false);
     }
