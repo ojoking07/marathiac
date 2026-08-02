@@ -5,6 +5,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : undefined,
+  }),
+
   head: () => ({
     meta: [
       { title: "Sign in | Alphabet Commanders" },
