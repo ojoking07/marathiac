@@ -20,6 +20,7 @@ import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedMySentencesRouteImport } from './routes/_authenticated/my-sentences'
 import { Route as AuthenticatedMyMeaningsRouteImport } from './routes/_authenticated/my-meanings'
 import { Route as AuthenticatedAdminMeaningsRouteImport } from './routes/_authenticated/admin/meanings'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
 const WordsRoute = WordsRouteImport.update({
   id: '/words',
@@ -77,6 +78,11 @@ const AuthenticatedAdminMeaningsRoute =
     path: '/admin/meanings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/practice': typeof AuthenticatedPracticeRoute
   '/test': typeof AuthenticatedTestRoute
   '/sentences/daily-use': typeof SentencesDailyUseRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
 }
 export interface FileRoutesByTo {
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/practice': typeof AuthenticatedPracticeRoute
   '/test': typeof AuthenticatedTestRoute
   '/sentences/daily-use': typeof SentencesDailyUseRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
 }
 export interface FileRoutesById {
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/_authenticated/test': typeof AuthenticatedTestRoute
   '/sentences/daily-use': typeof SentencesDailyUseRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
 }
 export interface FileRouteTypes {
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/practice'
     | '/test'
     | '/sentences/daily-use'
+    | '/.lovable/oauth/consent'
     | '/admin/meanings'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/practice'
     | '/test'
     | '/sentences/daily-use'
+    | '/.lovable/oauth/consent'
     | '/admin/meanings'
   id:
     | '__root__'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/_authenticated/practice'
     | '/_authenticated/test'
     | '/sentences/daily-use'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/admin/meanings'
   fileRoutesById: FileRoutesById
 }
@@ -163,6 +175,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WordsRoute: typeof WordsRoute
   SentencesDailyUseRoute: typeof SentencesDailyUseRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -244,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminMeaningsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -273,6 +293,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   WordsRoute: WordsRoute,
   SentencesDailyUseRoute: SentencesDailyUseRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
