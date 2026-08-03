@@ -5,7 +5,7 @@ const URL = "https://marathiac.lovable.app/sentences/daily-use";
 const OG_IMAGE = "https://marathiac.lovable.app/og-image.jpg";
 const TITLE = `${DAILY_SENTENCE_COUNT} Daily Use English Sentences with Marathi Meaning`;
 const DESCRIPTION =
-  "Common everyday English sentences with Marathi meaning and pronunciation — greetings, classroom talk, household chores and village life. Free for Marathi-speaking students.";
+  "Everyday English sentences with Marathi meaning and pronunciation — greetings, classroom talk and household chores. Free for Marathi-speaking students.";
 
 export const Route = createFileRoute("/sentences/daily-use")({
   head: () => ({
