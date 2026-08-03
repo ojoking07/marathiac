@@ -9,6 +9,7 @@ Students learn 30 Level 1 English words with Marathi pronunciation, write their 
 - [Home](/): What the Alphabet Commanders program is and how the practice works.
 - [Word Bank](/words): All 30 Level 1 English words with Marathi pronunciation, part of speech, meaning and example sentences.
 - [Daily Use English Sentences with Marathi Meaning](/sentences/daily-use): Common everyday English sentences — greetings, classroom talk and household chores — with Marathi meaning and pronunciation.
+- [Daily Use English Sentences for Students: Step-by-Step Guide](/sentences/daily-guide): A five-step learning path for students building everyday English sentences.
 
 ## Optional
 
