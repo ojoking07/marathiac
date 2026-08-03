@@ -54,6 +54,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google-site-verification", content: "3biglwH1nODwM4Gs0CkGa0d-Ism8iVCGeOqI6nMteQU" },
       { title: "Alphabet Commanders — Sentence Practice for Marathi Students" },
       { name: "description", content: "A sentence-building and testing playground for Marathi-speaking children learning English through the US Kids 4 Water Alphabet Commanders program." },
       { name: "author", content: "US Kids 4 Water" },
