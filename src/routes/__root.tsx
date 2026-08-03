@@ -60,8 +60,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "US Kids 4 Water" },
       // Block Grammarly and other writing assistants across the whole app.
       { name: "grammarly", content: "false" },
-      { property: "og:title", content: "Alphabet Commanders — Sentence Practice" },
-      { property: "og:description", content: "Learn English one sentence at a time. Marathi Alphabet Commanders program." },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Alphabet Commanders" },
       { name: "twitter:card", content: "summary_large_image" },
