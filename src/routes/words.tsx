@@ -67,6 +67,7 @@ function WordsPage() {
         <input
           value={q}
           onChange={e => setQ(e.target.value)}
+          aria-label="Search words, meanings or Marathi pronunciation"
           placeholder="Search words, meanings, मराठी…"
           className="w-full rounded-full border-2 border-border bg-card px-5 py-2.5 font-semibold shadow-soft outline-none transition focus:border-primary sm:w-72"
         />
@@ -102,7 +103,7 @@ function WordsPage() {
                 </span>
                 <span className="text-xs font-semibold text-muted-foreground">#{w.id}</span>
               </div>
-              <h3 className="mt-3 font-display text-3xl font-extrabold text-foreground">{w.word}</h3>
+              <h2 className="mt-3 font-display text-3xl font-extrabold text-foreground">{w.word}</h2>
               <div className="text-sm font-semibold text-muted-foreground">
                 <span className="text-foreground/70">{w.pronunciation}</span>
               </div>
