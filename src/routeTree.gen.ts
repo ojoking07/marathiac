@@ -16,6 +16,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SentencesDailyUseRouteImport } from './routes/sentences.daily-use'
+import { Route as SentencesDailyGuideRouteImport } from './routes/sentences.daily-guide'
 import { Route as AuthenticatedTestRouteImport } from './routes/_authenticated/test'
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as AuthenticatedMySentencesRouteImport } from './routes/_authenticated/my-sentences'
@@ -58,6 +59,11 @@ const IndexRoute = IndexRouteImport.update({
 const SentencesDailyUseRoute = SentencesDailyUseRouteImport.update({
   id: '/sentences/daily-use',
   path: '/sentences/daily-use',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SentencesDailyGuideRoute = SentencesDailyGuideRouteImport.update({
+  id: '/sentences/daily-guide',
+  path: '/sentences/daily-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedTestRoute = AuthenticatedTestRouteImport.update({
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/my-sentences': typeof AuthenticatedMySentencesRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/test': typeof AuthenticatedTestRoute
+  '/sentences/daily-guide': typeof SentencesDailyGuideRoute
   '/sentences/daily-use': typeof SentencesDailyUseRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/my-sentences': typeof AuthenticatedMySentencesRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/test': typeof AuthenticatedTestRoute
+  '/sentences/daily-guide': typeof SentencesDailyGuideRoute
   '/sentences/daily-use': typeof SentencesDailyUseRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/_authenticated/my-sentences': typeof AuthenticatedMySentencesRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/_authenticated/test': typeof AuthenticatedTestRoute
+  '/sentences/daily-guide': typeof SentencesDailyGuideRoute
   '/sentences/daily-use': typeof SentencesDailyUseRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/my-sentences'
     | '/practice'
     | '/test'
+    | '/sentences/daily-guide'
     | '/sentences/daily-use'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/my-sentences'
     | '/practice'
     | '/test'
+    | '/sentences/daily-guide'
     | '/sentences/daily-use'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -213,6 +224,7 @@ export interface FileRouteTypes {
     | '/_authenticated/my-sentences'
     | '/_authenticated/practice'
     | '/_authenticated/test'
+    | '/sentences/daily-guide'
     | '/sentences/daily-use'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -228,6 +240,7 @@ export interface RootRouteChildren {
   WordsRoute: typeof WordsRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  SentencesDailyGuideRoute: typeof SentencesDailyGuideRoute
   SentencesDailyUseRoute: typeof SentencesDailyUseRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -282,6 +295,13 @@ declare module '@tanstack/react-router' {
       path: '/sentences/daily-use'
       fullPath: '/sentences/daily-use'
       preLoaderRoute: typeof SentencesDailyUseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sentences/daily-guide': {
+      id: '/sentences/daily-guide'
+      path: '/sentences/daily-guide'
+      fullPath: '/sentences/daily-guide'
+      preLoaderRoute: typeof SentencesDailyGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/test': {
@@ -379,6 +399,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  SentencesDailyGuideRoute: SentencesDailyGuideRoute,
   SentencesDailyUseRoute: SentencesDailyUseRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
