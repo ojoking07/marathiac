@@ -182,31 +182,12 @@ function DailyGuide() {
       <section className="mt-12">
         <h2 className="font-display text-3xl font-extrabold">Common questions</h2>
         <div className="mt-4 grid gap-4">
-          <div className="rounded-2xl bg-card p-5 shadow-soft">
-            <h3 className="font-display text-lg font-extrabold">
-              How many sentences should I learn a day?
-            </h3>
-            <p className="mt-1 text-muted-foreground">
-              Five is enough. Saying five sentences correctly every day works better than reading
-              fifty once.
-            </p>
-          </div>
-          <div className="rounded-2xl bg-card p-5 shadow-soft">
-            <h3 className="font-display text-lg font-extrabold">
-              Do I need to know Marathi meanings?
-            </h3>
-            <p className="mt-1 text-muted-foreground">
-              Each sentence shows a Marathi meaning and pronunciation, and you can save your own
-              Marathi meaning for every word once you sign in.
-            </p>
-          </div>
-          <div className="rounded-2xl bg-card p-5 shadow-soft">
-            <h3 className="font-display text-lg font-extrabold">Is this free?</h3>
-            <p className="mt-1 text-muted-foreground">
-              Yes. Alphabet Commanders is a free resource built by US Kids 4 Water for students in
-              rural India.
-            </p>
-          </div>
+          {FAQS.map(f => (
+            <div key={f.q} className="rounded-2xl bg-card p-5 shadow-soft">
+              <h2 className="font-display text-lg font-extrabold">{f.q}</h2>
+              <p className="mt-1 text-muted-foreground">{f.a}</p>
+            </div>
+          ))}
         </div>
       </section>
 
