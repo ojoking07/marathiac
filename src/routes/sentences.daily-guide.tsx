@@ -67,7 +67,7 @@ const STEPS = [
 export const Route = createFileRoute("/sentences/daily-guide")({
   head: () => ({
     meta: [
-      { title: `${TITLE} | Alphabet Commanders` },
+      { title: META_TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
@@ -95,6 +95,18 @@ export const Route = createFileRoute("/sentences/daily-guide")({
             position: i + 1,
             name: s.title,
             text: s.body,
+          })),
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map(f => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
           })),
         }),
       },
