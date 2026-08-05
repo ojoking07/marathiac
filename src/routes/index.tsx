@@ -3,7 +3,7 @@ import { WORDS, GRAMMAR_STYLES } from "@/lib/words";
 
 const HOME_URL = "https://marathiac.lovable.app/";
 const OG_IMAGE = "https://marathiac.lovable.app/og-image.jpg";
-const HOME_TITLE = "Alphabet Commanders — Learn English Sentences in Marathi";
+const HOME_TITLE = "Alphabet Commanders — English Sentences in Marathi";
 const HOME_DESCRIPTION =
   "Free English sentence practice for Marathi-speaking kids: 30 Level 1 words with Marathi pronunciation, instant grammar feedback and a scored test.";
 
