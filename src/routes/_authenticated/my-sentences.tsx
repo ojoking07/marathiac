@@ -63,7 +63,7 @@ function MySentences() {
                     <div className="text-lg leading-none">
                       {[1,2,3,4,5].map(i => <span key={i} className={i <= item.stars ? "" : "opacity-25 grayscale"}>⭐</span>)}
                     </div>
-                    <button onClick={() => onRemove(item.id)} className="rounded-full px-2 py-1 text-xs font-bold text-muted-foreground hover:text-destructive">Remove</button>
+                    <button onClick={() => onRemove(item.id)} aria-label={`Remove sentence "${item.sentence}"`} className="rounded-full px-2 py-1 text-xs font-bold text-muted-foreground hover:text-destructive">Remove</button>
                   </div>
                 </div>
                 <p className="mt-2 text-lg">"{item.sentence}"</p>

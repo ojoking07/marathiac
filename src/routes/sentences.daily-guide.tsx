@@ -4,8 +4,24 @@ import { DAILY_SENTENCE_GROUPS } from "@/data/daily-sentences";
 const URL = "https://marathiac.lovable.app/sentences/daily-guide";
 const OG_IMAGE = "https://marathiac.lovable.app/og-image.jpg";
 const TITLE = "Daily Use English Sentences for Students: A Step-by-Step Guide";
+const META_TITLE = "Daily English Sentences Guide | Alphabet Commanders";
 const DESCRIPTION =
   "A step-by-step guide for students learning daily use English sentences — classroom and household phrases, Marathi pronunciation and a 5-step practice routine.";
+
+const FAQS = [
+  {
+    q: "How many sentences should I learn a day?",
+    a: "Five is enough. Saying five sentences correctly every day works better than reading fifty once.",
+  },
+  {
+    q: "Do I need to know Marathi meanings?",
+    a: "Each sentence shows a Marathi meaning and pronunciation, and you can save your own Marathi meaning for every word once you sign in.",
+  },
+  {
+    q: "Is this free?",
+    a: "Yes. Alphabet Commanders is a free resource built by US Kids 4 Water for students in rural India.",
+  },
+];
 
 const STEPS = [
   {
@@ -51,7 +67,7 @@ const STEPS = [
 export const Route = createFileRoute("/sentences/daily-guide")({
   head: () => ({
     meta: [
-      { title: `${TITLE} | Alphabet Commanders` },
+      { title: META_TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
@@ -79,6 +95,18 @@ export const Route = createFileRoute("/sentences/daily-guide")({
             position: i + 1,
             name: s.title,
             text: s.body,
+          })),
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map(f => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
           })),
         }),
       },
@@ -154,31 +182,12 @@ function DailyGuide() {
       <section className="mt-12">
         <h2 className="font-display text-3xl font-extrabold">Common questions</h2>
         <div className="mt-4 grid gap-4">
-          <div className="rounded-2xl bg-card p-5 shadow-soft">
-            <h3 className="font-display text-lg font-extrabold">
-              How many sentences should I learn a day?
-            </h3>
-            <p className="mt-1 text-muted-foreground">
-              Five is enough. Saying five sentences correctly every day works better than reading
-              fifty once.
-            </p>
-          </div>
-          <div className="rounded-2xl bg-card p-5 shadow-soft">
-            <h3 className="font-display text-lg font-extrabold">
-              Do I need to know Marathi meanings?
-            </h3>
-            <p className="mt-1 text-muted-foreground">
-              Each sentence shows a Marathi meaning and pronunciation, and you can save your own
-              Marathi meaning for every word once you sign in.
-            </p>
-          </div>
-          <div className="rounded-2xl bg-card p-5 shadow-soft">
-            <h3 className="font-display text-lg font-extrabold">Is this free?</h3>
-            <p className="mt-1 text-muted-foreground">
-              Yes. Alphabet Commanders is a free resource built by US Kids 4 Water for students in
-              rural India.
-            </p>
-          </div>
+          {FAQS.map(f => (
+            <div key={f.q} className="rounded-2xl bg-card p-5 shadow-soft">
+              <h2 className="font-display text-lg font-extrabold">{f.q}</h2>
+              <p className="mt-1 text-muted-foreground">{f.a}</p>
+            </div>
+          ))}
         </div>
       </section>
 

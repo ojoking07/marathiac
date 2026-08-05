@@ -88,7 +88,7 @@ function PracticePage() {
               <span className="text-xs font-semibold text-muted-foreground">Word #{current.id} of {WORDS.length}</span>
               {mastered.has(current.id) && <span className="rounded-full bg-leaf/20 px-2 py-0.5 text-xs font-bold">Mastered ✓</span>}
             </div>
-            <button onClick={random} className="rounded-full border-2 border-primary/20 bg-card px-4 py-1.5 text-sm font-bold shadow-soft hover:bg-secondary">
+            <button onClick={random} aria-label="Surprise me with a random word" className="rounded-full border-2 border-primary/20 bg-card px-4 py-1.5 text-sm font-bold shadow-soft hover:bg-secondary">
               🎲 Surprise me
             </button>
           </div>
