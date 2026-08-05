@@ -4,8 +4,24 @@ import { DAILY_SENTENCE_GROUPS } from "@/data/daily-sentences";
 const URL = "https://marathiac.lovable.app/sentences/daily-guide";
 const OG_IMAGE = "https://marathiac.lovable.app/og-image.jpg";
 const TITLE = "Daily Use English Sentences for Students: A Step-by-Step Guide";
+const META_TITLE = "Daily English Sentences Guide | Alphabet Commanders";
 const DESCRIPTION =
   "A step-by-step guide for students learning daily use English sentences — classroom and household phrases, Marathi pronunciation and a 5-step practice routine.";
+
+const FAQS = [
+  {
+    q: "How many sentences should I learn a day?",
+    a: "Five is enough. Saying five sentences correctly every day works better than reading fifty once.",
+  },
+  {
+    q: "Do I need to know Marathi meanings?",
+    a: "Each sentence shows a Marathi meaning and pronunciation, and you can save your own Marathi meaning for every word once you sign in.",
+  },
+  {
+    q: "Is this free?",
+    a: "Yes. Alphabet Commanders is a free resource built by US Kids 4 Water for students in rural India.",
+  },
+];
 
 const STEPS = [
   {
