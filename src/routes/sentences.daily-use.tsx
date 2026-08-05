@@ -3,7 +3,7 @@ import { DAILY_SENTENCE_GROUPS, DAILY_SENTENCE_COUNT } from "@/data/daily-senten
 
 const URL = "https://marathiac.lovable.app/sentences/daily-use";
 const OG_IMAGE = "https://marathiac.lovable.app/og-image.jpg";
-const TITLE = `${DAILY_SENTENCE_COUNT} Daily Use English Sentences with Marathi Meaning`;
+const TITLE = `${DAILY_SENTENCE_COUNT} Daily English Sentences in Marathi`;
 const DESCRIPTION =
   "Everyday English sentences with Marathi meaning and pronunciation — greetings, classroom talk and household chores. Free for Marathi-speaking students.";
 
