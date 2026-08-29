@@ -33,6 +33,13 @@ const signUpSchema = z.object({
   password: z.string().min(6, "At least 6 characters").max(72),
 });
 
+/** Teacher/admin accounts sign in with an emailed link instead of a password. */
+const ADMIN_EMAILS = new Set([
+  "2009ojastar@gmail.com",
+  "shilpanikam@yahoo.com",
+  "thedighes@gmail.com",
+]);
+
 function AuthPage() {
   const navigate = useNavigate();
   const { next } = Route.useSearch();
@@ -45,6 +52,11 @@ function AuthPage() {
   const [village, setVillage] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [sentLink, setSentLink] = useState(false);
+
+  const isAdminEmail = ADMIN_EMAILS.has(email.trim().toLowerCase());
+  const passwordless = mode === "signin" && isAdminEmail;
+
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
