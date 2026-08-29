@@ -119,8 +119,16 @@ function AuthPage() {
             </>
           )}
           <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="you@example.com" />
-          <Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 6 characters" />
+          {!passwordless && (
+            <Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 6 characters" />
+          )}
+          {passwordless && (
+            <p className="rounded-2xl bg-secondary/40 p-3 text-sm text-muted-foreground">
+              Teacher account — no password needed. We'll email you a one-tap sign-in link.
+            </p>
+          )}
 
+          {sentLink && <div className="rounded-2xl bg-secondary/40 p-3 text-sm">Check your inbox for the sign-in link.</div>}
           {err && <div className="rounded-2xl bg-destructive/10 p-3 text-sm text-destructive">{err}</div>}
 
           <button
@@ -128,8 +136,9 @@ function AuthPage() {
             disabled={busy}
             className="mt-2 rounded-full bg-primary px-5 py-3 font-bold text-primary-foreground shadow-pop transition hover:scale-[1.02] disabled:opacity-50"
           >
-            {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
+            {busy ? "Please wait…" : passwordless ? "Email me a sign-in link" : mode === "signin" ? "Sign in" : "Create account"}
           </button>
+
         </form>
 
         <div className="mt-4 text-center text-sm">
