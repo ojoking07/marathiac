@@ -33,6 +33,13 @@ const signUpSchema = z.object({
   password: z.string().min(6, "At least 6 characters").max(72),
 });
 
+/** Teacher/admin accounts sign in with an emailed link instead of a password. */
+const ADMIN_EMAILS = new Set([
+  "2009ojastar@gmail.com",
+  "shilpanikam@yahoo.com",
+  "thedighes@gmail.com",
+]);
+
 function AuthPage() {
   const navigate = useNavigate();
   const { next } = Route.useSearch();
@@ -45,6 +52,11 @@ function AuthPage() {
   const [village, setVillage] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [sentLink, setSentLink] = useState(false);
+
+  const isAdminEmail = ADMIN_EMAILS.has(email.trim().toLowerCase());
+  const passwordless = mode === "signin" && isAdminEmail;
+
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,10 +74,19 @@ function AuthPage() {
           },
         });
         if (error) { setErr(error.message); return; }
+      } else if (passwordless) {
+        const { error } = await supabase.auth.signInWithOtp({
+          email: email.trim(),
+          options: { emailRedirectTo: `${window.location.origin}${next ?? "/admin/meanings"}`, shouldCreateUser: false },
+        });
+        if (error) { setErr(error.message); return; }
+        setSentLink(true);
+        return;
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) { setErr(error.message); return; }
       }
+
       if (next) { window.location.href = next; return; }
       navigate({ to: "/practice" });
 
@@ -98,8 +119,16 @@ function AuthPage() {
             </>
           )}
           <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="you@example.com" />
-          <Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 6 characters" />
+          {!passwordless && (
+            <Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 6 characters" />
+          )}
+          {passwordless && (
+            <p className="rounded-2xl bg-secondary/40 p-3 text-sm text-muted-foreground">
+              Teacher account — no password needed. We'll email you a one-tap sign-in link.
+            </p>
+          )}
 
+          {sentLink && <div className="rounded-2xl bg-secondary/40 p-3 text-sm">Check your inbox for the sign-in link.</div>}
           {err && <div className="rounded-2xl bg-destructive/10 p-3 text-sm text-destructive">{err}</div>}
 
           <button
@@ -107,8 +136,9 @@ function AuthPage() {
             disabled={busy}
             className="mt-2 rounded-full bg-primary px-5 py-3 font-bold text-primary-foreground shadow-pop transition hover:scale-[1.02] disabled:opacity-50"
           >
-            {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
+            {busy ? "Please wait…" : passwordless ? "Email me a sign-in link" : mode === "signin" ? "Sign in" : "Create account"}
           </button>
+
         </form>
 
         <div className="mt-4 text-center text-sm">
