@@ -74,10 +74,19 @@ function AuthPage() {
           },
         });
         if (error) { setErr(error.message); return; }
+      } else if (passwordless) {
+        const { error } = await supabase.auth.signInWithOtp({
+          email: email.trim(),
+          options: { emailRedirectTo: `${window.location.origin}${next ?? "/admin/meanings"}`, shouldCreateUser: false },
+        });
+        if (error) { setErr(error.message); return; }
+        setSentLink(true);
+        return;
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) { setErr(error.message); return; }
       }
+
       if (next) { window.location.href = next; return; }
       navigate({ to: "/practice" });
 
