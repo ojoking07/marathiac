@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { listProgress, pickTestWords, recordAttempt } from "@/lib/progress";
 import { WORDS, type WordEntry } from "@/lib/words";
 import { submitTestAttempt, type ScoredAnswer } from "@/lib/test-scoring.functions";
+import { listMyAttempts, formatWhen } from "@/lib/tests";
 import { NoAssistInput, NoAssistTextarea } from "@/components/NoAssistTextarea";
 import { toast } from "sonner";
 
