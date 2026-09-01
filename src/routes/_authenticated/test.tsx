@@ -339,7 +339,6 @@ function TestPage() {
         </ol>
 
         <div className="mt-6 flex gap-3">
-          <button onClick={() => { setStage("intro"); setScored(null); }} className="rounded-full bg-primary px-5 py-2 font-bold text-primary-foreground shadow-pop">Take another test</button>
           <button onClick={() => navigate({ to: "/practice" })} className="rounded-full border-2 border-border bg-card px-5 py-2 font-bold">Back to practice</button>
         </div>
       </div>
