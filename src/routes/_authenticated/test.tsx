@@ -146,6 +146,7 @@ function TestPage() {
     submittedRef.current = true;
 
     setStage("done");
+    setSubmitting(true);
     if (document.fullscreenElement) { document.exitFullscreen().catch(()=>{}); }
 
     try {
@@ -176,14 +177,90 @@ function TestPage() {
       setScored(results);
 
       for (const r of results) {
-        await recordAttempt(r.word.id, r.grammarStars, { spellingCorrect: r.spellingCorrect });
+        try {
+          await recordAttempt(r.word.id, r.grammarStars, { spellingCorrect: r.spellingCorrect });
+        } catch { /* progress tracking is best-effort */ }
       }
       qc.invalidateQueries({ queryKey: ["progress"] });
+      qc.invalidateQueries({ queryKey: ["my-attempts"] });
+      qc.invalidateQueries({ queryKey: ["all-attempts"] });
     } catch (e) {
       console.error(e);
       toast.error("We couldn't score your test. Please try again.");
+      submittedRef.current = false;
+      setStage("intro");
+    } finally {
+      setSubmitting(false);
     }
   };
+
+  // Submitting spinner
+  if (stage === "done" && submitting) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-24 text-center">
+        <div className="animate-pulse text-6xl">📝</div>
+        <h1 className="mt-4 text-3xl">Submitting your test…</h1>
+        <p className="mt-2 text-muted-foreground">Please wait while we score your answers.</p>
+      </div>
+    );
+  }
+
+  // Already submitted (only one attempt allowed)
+  if (stage !== "active" && !scored && previous) {
+    const pct = previous.max_score ? Math.round((previous.score / previous.max_score) * 100) : 0;
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-10">
+        <div className="rounded-3xl bg-gradient-hero p-8 text-center shadow-pop">
+          <div className="text-6xl">✅</div>
+          <h1 className="mt-3 font-display text-3xl font-extrabold">You have already submitted your test</h1>
+          <p className="mt-2 text-muted-foreground">
+            Submitted on <span className="font-bold text-foreground">{formatWhen(previous.created_at)}</span>
+          </p>
+          <p className="mt-4 font-display text-5xl font-extrabold">{previous.score} / {previous.max_score}</p>
+          <p className="text-lg font-semibold text-muted-foreground">{pct}%</p>
+          <p className="mt-4 text-sm text-muted-foreground">The test can only be taken once. Your teacher can see your answers and score.</p>
+        </div>
+
+        <ol className="mt-6 grid gap-3">
+          {previous.details.map((d, i) => (
+            <li key={i} className="rounded-3xl bg-card p-5 shadow-soft">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div className="text-lg font-semibold text-muted-foreground">{d.pronunciation}</div>
+                  <div className="font-display text-2xl font-extrabold">{d.word}</div>
+                </div>
+                <div className="rounded-full bg-primary/10 px-3 py-1 font-bold text-primary">{d.points}/2</div>
+              </div>
+              <div className="mt-3 grid gap-2 text-sm">
+                <div>
+                  <span className="font-semibold">English word:</span> "{d.english || "—"}"
+                  {d.spelling_correct ? <span className="ml-2 text-leaf-foreground">✓ correct</span> : <span className="ml-2 text-coral">✗ incorrect</span>}
+                </div>
+                <div>
+                  <span className="font-semibold">Sentence:</span> "{d.sentence || "—"}"
+                  <span className="ml-2">{"⭐".repeat(d.grammar_stars)}<span className="opacity-25">{"⭐".repeat(5 - d.grammar_stars)}</span></span>
+                </div>
+                {d.issues?.length > 0 && (
+                  <ul className="ml-4 list-disc text-xs text-muted-foreground">
+                    {d.issues.map((m, k) => <li key={k}>{m}</li>)}
+                  </ul>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-6">
+          <button onClick={() => navigate({ to: "/practice" })} className="rounded-full border-2 border-border bg-card px-5 py-2 font-bold">Back to practice</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (stage === "intro" && attemptsLoading) {
+    return <div className="mx-auto max-w-2xl px-4 py-20 text-center text-muted-foreground">Loading your test…</div>;
+  }
+
 
   // Intro
   if (stage === "intro") {
