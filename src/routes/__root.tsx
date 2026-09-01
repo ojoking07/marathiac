@@ -148,6 +148,7 @@ function SiteHeader() {
           <NavLink to="/my-sentences">My Sentences</NavLink>
           <NavLink to="/my-meanings">My Meanings</NavLink>
           {admin && <NavLink to="/admin/meanings">Review</NavLink>}
+          {admin && <NavLink to="/admin/tests">Test Results</NavLink>}
           {user ? (
             <button onClick={signOut} className="ml-1 rounded-full border-2 border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground/80 shadow-soft hover:bg-secondary">
               Sign out
