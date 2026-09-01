@@ -23,6 +23,7 @@ import { Route as AuthenticatedMySentencesRouteImport } from './routes/_authenti
 import { Route as AuthenticatedMyMeaningsRouteImport } from './routes/_authenticated/my-meanings'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as AuthenticatedAdminTestsRouteImport } from './routes/_authenticated/admin/tests'
 import { Route as AuthenticatedAdminMeaningsRouteImport } from './routes/_authenticated/admin/meanings'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
@@ -99,6 +100,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedAdminTestsRoute = AuthenticatedAdminTestsRouteImport.update({
+  id: '/admin/tests',
+  path: '/admin/tests',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminMeaningsRoute =
   AuthenticatedAdminMeaningsRouteImport.update({
     id: '/admin/meanings',
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
+  '/admin/tests': typeof AuthenticatedAdminTestsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
+  '/admin/tests': typeof AuthenticatedAdminTestsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/meanings': typeof AuthenticatedAdminMeaningsRoute
+  '/_authenticated/admin/tests': typeof AuthenticatedAdminTestsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -192,6 +201,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/meanings'
+    | '/admin/tests'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/meanings'
+    | '/admin/tests'
   id:
     | '__root__'
     | '/'
@@ -229,6 +240,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/meanings'
+    | '/_authenticated/admin/tests'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -346,6 +358,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/tests': {
+      id: '/_authenticated/admin/tests'
+      path: '/admin/tests'
+      fullPath: '/admin/tests'
+      preLoaderRoute: typeof AuthenticatedAdminTestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/meanings': {
       id: '/_authenticated/admin/meanings'
       path: '/admin/meanings'
@@ -376,6 +395,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
   AuthenticatedTestRoute: typeof AuthenticatedTestRoute
   AuthenticatedAdminMeaningsRoute: typeof AuthenticatedAdminMeaningsRoute
+  AuthenticatedAdminTestsRoute: typeof AuthenticatedAdminTestsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -384,6 +404,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
   AuthenticatedTestRoute: AuthenticatedTestRoute,
   AuthenticatedAdminMeaningsRoute: AuthenticatedAdminMeaningsRoute,
+  AuthenticatedAdminTestsRoute: AuthenticatedAdminTestsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
