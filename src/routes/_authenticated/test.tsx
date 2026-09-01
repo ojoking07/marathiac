@@ -44,6 +44,11 @@ function TestPage() {
   const qc = useQueryClient();
   const submitAttempt = useServerFn(submitTestAttempt);
   const { data: progress } = useQuery({ queryKey: ["progress"], queryFn: listProgress });
+  const { data: attempts, isLoading: attemptsLoading } = useQuery({
+    queryKey: ["my-attempts"],
+    queryFn: listMyAttempts,
+  });
+  const previous = attempts?.[0] ?? null;
 
   const [stage, setStage] = useState<"intro" | "active" | "done">("intro");
   const [words, setWords] = useState<WordEntry[]>([]);
@@ -52,6 +57,7 @@ function TestPage() {
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT_SEC);
   const [violations, setViolations] = useState<string[]>([]);
   const [scored, setScored] = useState<Scored[] | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const submittedRef = useRef(false);
 
