@@ -37,12 +37,13 @@ const signUpSchema = z.object({
   password: z.string().min(6, "At least 6 characters").max(72),
 });
 
-/** Teacher/admin accounts sign in with an emailed link instead of a password. */
+/** Teacher/admin accounts sign in with their email and a password. */
 const ADMIN_EMAILS = new Set([
   "2009ojastar@gmail.com",
   "shilpanikam@yahoo.com",
   "thedighes@gmail.com",
 ]);
+
 
 function AuthPage() {
   const navigate = useNavigate();
@@ -70,14 +71,30 @@ function AuthPage() {
       if (isTeacher) {
         const addr = email.trim().toLowerCase();
         if (!ADMIN_EMAILS.has(addr)) { setErr("This email is not a teacher account."); return; }
-        const { error } = await supabase.auth.signInWithOtp({
-          email: addr,
-          options: { emailRedirectTo: `${window.location.origin}${next ?? "/admin/meanings"}`, shouldCreateUser: false },
-        });
-        if (error) { setErr(error.message); return; }
-        setSentLink(true);
+        if (password.length < 6) { setErr("Password must be at least 6 characters."); return; }
+
+        const { error } = await supabase.auth.signInWithPassword({ email: addr, password });
+        if (error) {
+          if (error.message === "Invalid login credentials") {
+            // First time signing in: create the teacher account with this password.
+            const { error: signUpError } = await supabase.auth.signUp({
+              email: addr,
+              password,
+              options: { emailRedirectTo: `${window.location.origin}${next ?? "/admin/meanings"}` },
+            });
+            if (signUpError) { setErr(signUpError.message); return; }
+            const { error: retry } = await supabase.auth.signInWithPassword({ email: addr, password });
+            if (retry) { setErr("Wrong password for this teacher account."); return; }
+          } else {
+            setErr(error.message);
+            return;
+          }
+        }
+        if (next) { window.location.href = next; return; }
+        navigate({ to: "/admin/meanings" });
         return;
       }
+
 
       const digits = phone.replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
 
