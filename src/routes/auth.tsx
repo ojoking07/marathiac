@@ -25,11 +25,15 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+const PHONE_RE = /^[6-9]\d{9}$/;
+/** Students sign in with their 10-digit phone number; we map it to an internal login id. */
+const phoneToEmail = (phone: string) => `${phone}@students.alphabetcommanders.app`;
+
 const signUpSchema = z.object({
   name: z.string().trim().min(1, "Please enter your name").max(80),
   grade: z.string().trim().max(40),
   village: z.string().trim().max(80),
-  email: z.string().trim().email("Enter a valid email").max(200),
+  phone: z.string().trim().regex(PHONE_RE, "Enter a valid 10-digit Indian phone number"),
   password: z.string().min(6, "At least 6 characters").max(72),
 });
 
@@ -45,6 +49,8 @@ function AuthPage() {
   const { next } = Route.useSearch();
 
   const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [role, setRole] = useState<"student" | "teacher">("student");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -54,37 +60,46 @@ function AuthPage() {
   const [err, setErr] = useState<string | null>(null);
   const [sentLink, setSentLink] = useState(false);
 
-  const isAdminEmail = ADMIN_EMAILS.has(email.trim().toLowerCase());
-  const passwordless = mode === "signin" && isAdminEmail;
-
+  const isTeacher = role === "teacher";
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
     setErr(null);
     try {
-      if (mode === "signup") {
-        const parsed = signUpSchema.safeParse({ name, grade, village, email, password });
-        if (!parsed.success) { setErr(parsed.error.issues[0].message); return; }
-        const { error } = await supabase.auth.signUp({
-          email, password,
-          options: {
-            emailRedirectTo: `${window.location.origin}${next ?? "/practice"}`,
-            data: { name, grade, village },
-          },
-        });
-        if (error) { setErr(error.message); return; }
-      } else if (passwordless) {
+      if (isTeacher) {
+        const addr = email.trim().toLowerCase();
+        if (!ADMIN_EMAILS.has(addr)) { setErr("This email is not a teacher account."); return; }
         const { error } = await supabase.auth.signInWithOtp({
-          email: email.trim(),
+          email: addr,
           options: { emailRedirectTo: `${window.location.origin}${next ?? "/admin/meanings"}`, shouldCreateUser: false },
         });
         if (error) { setErr(error.message); return; }
         setSentLink(true);
         return;
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+      }
+
+      const digits = phone.replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
+
+      if (mode === "signup") {
+        const parsed = signUpSchema.safeParse({ name, grade, village, phone: digits, password });
+        if (!parsed.success) { setErr(parsed.error.issues[0].message); return; }
+        const { error } = await supabase.auth.signUp({
+          email: phoneToEmail(digits),
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}${next ?? "/practice"}`,
+            data: { name, grade, village, phone: digits },
+          },
+        });
         if (error) { setErr(error.message); return; }
+      } else {
+        if (!PHONE_RE.test(digits)) { setErr("Enter a valid 10-digit Indian phone number"); return; }
+        const { error } = await supabase.auth.signInWithPassword({
+          email: phoneToEmail(digits),
+          password,
+        });
+        if (error) { setErr(error.message === "Invalid login credentials" ? "Wrong phone number or password." : error.message); return; }
       }
 
       if (next) { window.location.href = next; return; }
@@ -101,15 +116,15 @@ function AuthPage() {
         <div className="text-center">
           <div className="text-4xl">🌊</div>
           <h1 className="mt-2 font-display text-3xl font-extrabold">
-            {mode === "signin" ? "Sign in to Alphabet Commanders" : "Create your Alphabet Commanders account"}
+            {isTeacher ? "Teacher sign in" : mode === "signin" ? "Sign in to Alphabet Commanders" : "Create your Alphabet Commanders account"}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {mode === "signin" ? "Sign in to keep your progress." : "Create a student account."}
+            {isTeacher ? "We'll email you a one-tap sign-in link." : mode === "signin" ? "Use your 10-digit phone number." : "Create a student account with your phone number."}
           </p>
         </div>
 
         <form onSubmit={onSubmit} className="mt-6 grid gap-3" autoComplete="off">
-          {mode === "signup" && (
+          {!isTeacher && mode === "signup" && (
             <>
               <Field label="Your name" value={name} onChange={setName} placeholder="e.g., Aarav" />
               <div className="grid grid-cols-2 gap-3">
@@ -118,14 +133,22 @@ function AuthPage() {
               </div>
             </>
           )}
-          <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="you@example.com" />
-          {!passwordless && (
-            <Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 6 characters" />
-          )}
-          {passwordless && (
-            <p className="rounded-2xl bg-secondary/40 p-3 text-sm text-muted-foreground">
-              Teacher account — no password needed. We'll email you a one-tap sign-in link.
-            </p>
+
+          {isTeacher ? (
+            <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="you@example.com" />
+          ) : (
+            <>
+              <Field
+                label="Phone number"
+                type="tel"
+                inputMode="numeric"
+                maxLength={10}
+                value={phone}
+                onChange={v => setPhone(v.replace(/\D/g, "").slice(0, 10))}
+                placeholder="10-digit mobile number"
+              />
+              <Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 6 characters" />
+            </>
           )}
 
           {sentLink && <div className="rounded-2xl bg-secondary/40 p-3 text-sm">Check your inbox for the sign-in link.</div>}
@@ -136,10 +159,33 @@ function AuthPage() {
             disabled={busy}
             className="mt-2 rounded-full bg-primary px-5 py-3 font-bold text-primary-foreground shadow-pop transition hover:scale-[1.02] disabled:opacity-50"
           >
-            {busy ? "Please wait…" : passwordless ? "Email me a sign-in link" : mode === "signin" ? "Sign in" : "Create account"}
+            {busy ? "Please wait…" : isTeacher ? "Email me a sign-in link" : mode === "signin" ? "Sign in" : "Create account"}
           </button>
 
         </form>
+
+        {!isTeacher && (
+          <div className="mt-4 text-center text-sm">
+            {mode === "signin" ? (
+              <button className="text-primary hover:underline" onClick={() => setMode("signup")}>
+                New here? Create an account
+              </button>
+            ) : (
+              <button className="text-primary hover:underline" onClick={() => setMode("signin")}>
+                Already have an account? Sign in
+              </button>
+            )}
+          </div>
+        )}
+        <div className="mt-2 text-center">
+          <button
+            className="text-xs text-muted-foreground hover:underline"
+            onClick={() => { setRole(isTeacher ? "student" : "teacher"); setErr(null); setSentLink(false); }}
+          >
+            {isTeacher ? "← Student sign in" : "Teacher sign in"}
+          </button>
+        </div>
+
 
         <div className="mt-4 text-center text-sm">
           {mode === "signin" ? (
