@@ -201,7 +201,7 @@ function AuthPage() {
         <div className="mt-2 text-center">
           <button
             className="text-xs text-muted-foreground hover:underline"
-            onClick={() => { setRole(isTeacher ? "student" : "teacher"); setErr(null); setSentLink(false); }}
+            onClick={() => { setRole(isTeacher ? "student" : "teacher"); setErr(null); setPassword(""); }}
           >
             {isTeacher ? "← Student sign in" : "Teacher sign in"}
           </button>
