@@ -185,19 +185,6 @@ function AuthPage() {
             {isTeacher ? "← Student sign in" : "Teacher sign in"}
           </button>
         </div>
-
-
-        <div className="mt-4 text-center text-sm">
-          {mode === "signin" ? (
-            <button className="text-primary hover:underline" onClick={() => setMode("signup")}>
-              New here? Create an account
-            </button>
-          ) : (
-            <button className="text-primary hover:underline" onClick={() => setMode("signin")}>
-              Already have an account? Sign in
-            </button>
-          )}
-        </div>
         <div className="mt-2 text-center">
           <Link to="/" className="text-xs text-muted-foreground hover:underline">← Back home</Link>
         </div>
