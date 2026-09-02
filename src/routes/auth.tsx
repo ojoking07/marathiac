@@ -59,7 +59,6 @@ function AuthPage() {
   const [village, setVillage] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-  const [sentLink, setSentLink] = useState(false);
 
   const isTeacher = role === "teacher";
 
@@ -174,7 +173,6 @@ function AuthPage() {
             </>
           )}
 
-          {sentLink && <div className="rounded-2xl bg-secondary/40 p-3 text-sm">Check your inbox for the sign-in link.</div>}
           {err && <div className="rounded-2xl bg-destructive/10 p-3 text-sm text-destructive">{err}</div>}
 
           <button
