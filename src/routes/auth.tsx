@@ -136,8 +136,9 @@ function AuthPage() {
             {isTeacher ? "Teacher sign in" : mode === "signin" ? "Sign in to Alphabet Commanders" : "Create your Alphabet Commanders account"}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {isTeacher ? "We'll email you a one-tap sign-in link." : mode === "signin" ? "Use your 10-digit phone number." : "Create a student account with your phone number."}
+            {isTeacher ? "Use your teacher email and password." : mode === "signin" ? "Use your 10-digit phone number." : "Create a student account with your phone number."}
           </p>
+
         </div>
 
         <form onSubmit={onSubmit} className="mt-6 grid gap-3" autoComplete="off">
@@ -152,8 +153,13 @@ function AuthPage() {
           )}
 
           {isTeacher ? (
-            <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="you@example.com" />
+            <>
+              <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="you@example.com" />
+              <Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 6 characters" />
+              <p className="text-xs text-muted-foreground">First time? The password you type here becomes your teacher password.</p>
+            </>
           ) : (
+
             <>
               <Field
                 label="Phone number"
@@ -176,7 +182,7 @@ function AuthPage() {
             disabled={busy}
             className="mt-2 rounded-full bg-primary px-5 py-3 font-bold text-primary-foreground shadow-pop transition hover:scale-[1.02] disabled:opacity-50"
           >
-            {busy ? "Please wait…" : isTeacher ? "Email me a sign-in link" : mode === "signin" ? "Sign in" : "Create account"}
+            {busy ? "Please wait…" : isTeacher ? "Sign in" : mode === "signin" ? "Sign in" : "Create account"}
           </button>
 
         </form>
