@@ -194,16 +194,22 @@ function AuthPage() {
 }
 
 function Field({
-  label, value, onChange, type = "text", placeholder,
-}: { label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string }) {
+  label, value, onChange, type = "text", placeholder, inputMode, maxLength,
+}: {
+  label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string;
+  inputMode?: "numeric" | "text" | "tel"; maxLength?: number;
+}) {
   return (
     <label className="block">
       <span className="text-sm font-semibold text-foreground">{label}</span>
       <input
         type={type}
+        inputMode={inputMode}
+        maxLength={maxLength}
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
+
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
