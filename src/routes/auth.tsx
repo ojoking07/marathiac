@@ -37,12 +37,13 @@ const signUpSchema = z.object({
   password: z.string().min(6, "At least 6 characters").max(72),
 });
 
-/** Teacher/admin accounts sign in with an emailed link instead of a password. */
+/** Teacher/admin accounts sign in with their email and a password. */
 const ADMIN_EMAILS = new Set([
   "2009ojastar@gmail.com",
   "shilpanikam@yahoo.com",
   "thedighes@gmail.com",
 ]);
+
 
 function AuthPage() {
   const navigate = useNavigate();
@@ -58,7 +59,6 @@ function AuthPage() {
   const [village, setVillage] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-  const [sentLink, setSentLink] = useState(false);
 
   const isTeacher = role === "teacher";
 
@@ -70,14 +70,30 @@ function AuthPage() {
       if (isTeacher) {
         const addr = email.trim().toLowerCase();
         if (!ADMIN_EMAILS.has(addr)) { setErr("This email is not a teacher account."); return; }
-        const { error } = await supabase.auth.signInWithOtp({
-          email: addr,
-          options: { emailRedirectTo: `${window.location.origin}${next ?? "/admin/meanings"}`, shouldCreateUser: false },
-        });
-        if (error) { setErr(error.message); return; }
-        setSentLink(true);
+        if (password.length < 6) { setErr("Password must be at least 6 characters."); return; }
+
+        const { error } = await supabase.auth.signInWithPassword({ email: addr, password });
+        if (error) {
+          if (error.message === "Invalid login credentials") {
+            // First time signing in: create the teacher account with this password.
+            const { error: signUpError } = await supabase.auth.signUp({
+              email: addr,
+              password,
+              options: { emailRedirectTo: `${window.location.origin}${next ?? "/admin/meanings"}` },
+            });
+            if (signUpError) { setErr(signUpError.message); return; }
+            const { error: retry } = await supabase.auth.signInWithPassword({ email: addr, password });
+            if (retry) { setErr("Wrong password for this teacher account."); return; }
+          } else {
+            setErr(error.message);
+            return;
+          }
+        }
+        if (next) { window.location.href = next; return; }
+        navigate({ to: "/admin/meanings" });
         return;
       }
+
 
       const digits = phone.replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
 
@@ -119,8 +135,9 @@ function AuthPage() {
             {isTeacher ? "Teacher sign in" : mode === "signin" ? "Sign in to Alphabet Commanders" : "Create your Alphabet Commanders account"}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {isTeacher ? "We'll email you a one-tap sign-in link." : mode === "signin" ? "Use your 10-digit phone number." : "Create a student account with your phone number."}
+            {isTeacher ? "Use your teacher email and password." : mode === "signin" ? "Use your 10-digit phone number." : "Create a student account with your phone number."}
           </p>
+
         </div>
 
         <form onSubmit={onSubmit} className="mt-6 grid gap-3" autoComplete="off">
@@ -135,8 +152,13 @@ function AuthPage() {
           )}
 
           {isTeacher ? (
-            <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="you@example.com" />
+            <>
+              <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="you@example.com" />
+              <Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 6 characters" />
+              <p className="text-xs text-muted-foreground">First time? The password you type here becomes your teacher password.</p>
+            </>
           ) : (
+
             <>
               <Field
                 label="Phone number"
@@ -151,7 +173,6 @@ function AuthPage() {
             </>
           )}
 
-          {sentLink && <div className="rounded-2xl bg-secondary/40 p-3 text-sm">Check your inbox for the sign-in link.</div>}
           {err && <div className="rounded-2xl bg-destructive/10 p-3 text-sm text-destructive">{err}</div>}
 
           <button
@@ -159,7 +180,7 @@ function AuthPage() {
             disabled={busy}
             className="mt-2 rounded-full bg-primary px-5 py-3 font-bold text-primary-foreground shadow-pop transition hover:scale-[1.02] disabled:opacity-50"
           >
-            {busy ? "Please wait…" : isTeacher ? "Email me a sign-in link" : mode === "signin" ? "Sign in" : "Create account"}
+            {busy ? "Please wait…" : isTeacher ? "Sign in" : mode === "signin" ? "Sign in" : "Create account"}
           </button>
 
         </form>
@@ -180,7 +201,7 @@ function AuthPage() {
         <div className="mt-2 text-center">
           <button
             className="text-xs text-muted-foreground hover:underline"
-            onClick={() => { setRole(isTeacher ? "student" : "teacher"); setErr(null); setSentLink(false); }}
+            onClick={() => { setRole(isTeacher ? "student" : "teacher"); setErr(null); setPassword(""); }}
           >
             {isTeacher ? "← Student sign in" : "Teacher sign in"}
           </button>
