@@ -6,7 +6,8 @@
     "marathi": "धैर्य",
     "meaning": "Being brave.",
     "grammar": "Noun",
-    "example": "Courage helps us face difficulties."
+    "example": "Courage helps us face difficulties.",
+    "image": "/__l5e/assets-v1/419858a9-831a-4271-ab36-01ebef874c28/courage.jpg"
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "marathi": "साहस",
     "meaning": "An exciting experience.",
     "grammar": "Noun",
-    "example": "Our trip to the fort was a great adventure."
+    "example": "Our trip to the fort was a great adventure.",
+    "image": "/__l5e/assets-v1/dcfe37a2-99fa-42cc-8cb7-d63d4f89d65c/adventure.jpg"
   },
   {
     "id": 3,
@@ -24,7 +26,8 @@
     "marathi": "प्रवास",
     "meaning": "A trip from one place to another.",
     "grammar": "Noun",
-    "example": "The journey to the village took three hours."
+    "example": "The journey to the village took three hours.",
+    "image": "/__l5e/assets-v1/753d085c-f4f8-419e-9788-706491a7bd26/journey.jpg"
   },
   {
     "id": 4,
@@ -33,7 +36,8 @@
     "marathi": "परंपरा",
     "meaning": "A custom followed for many years.",
     "grammar": "Noun",
-    "example": "Wearing new clothes on Diwali is a family tradition."
+    "example": "Wearing new clothes on Diwali is a family tradition.",
+    "image": "/__l5e/assets-v1/3bf42909-c411-47e9-b463-2b4cead4c8a2/tradition.jpg"
   },
   {
     "id": 5,
@@ -42,7 +46,8 @@
     "marathi": "संस्कृती",
     "meaning": "The way people live and celebrate.",
     "grammar": "Noun",
-    "example": "Food, language, and festivals are important parts of a culture."
+    "example": "Food, language, and festivals are important parts of a culture.",
+    "image": "/__l5e/assets-v1/784eac48-8d09-4076-af95-3b60d7914bc7/culture.jpg"
   },
   {
     "id": 6,
@@ -51,7 +56,8 @@
     "marathi": "सण",
     "meaning": "A special celebration.",
     "grammar": "Noun",
-    "example": "Diwali is my favourite festival."
+    "example": "Diwali is my favourite festival.",
+    "image": "/__l5e/assets-v1/2dbbb3d0-d5ec-437b-b920-190638737742/festival.jpg"
   },
   {
     "id": 7,
@@ -60,7 +66,8 @@
     "marathi": "शोध",
     "meaning": "Something new that is made for the first time.",
     "grammar": "Noun",
-    "example": "The telephone is an important invention."
+    "example": "The telephone is an important invention.",
+    "image": "/__l5e/assets-v1/b50785b4-e4a5-44bb-9c55-a6e03a2971f2/invention.jpg"
   },
   {
     "id": 8,
@@ -69,7 +76,8 @@
     "marathi": "ज्ञान",
     "meaning": "Information and understanding gained from learning.",
     "grammar": "Noun",
-    "example": "Reading books increases our knowledge."
+    "example": "Reading books increases our knowledge.",
+    "image": "/__l5e/assets-v1/8f9f00b4-43fe-448c-a520-8d22d79c2902/knowledge.jpg"
   },
   {
     "id": 9,
@@ -78,7 +86,8 @@
     "marathi": "यश",
     "meaning": "Reaching a goal.",
     "grammar": "Noun",
-    "example": "Hard work leads to success."
+    "example": "Hard work leads to success.",
+    "image": "/__l5e/assets-v1/ef305b53-9686-4ccf-9bd9-86793d2dc6a3/success.jpg"
   },
   {
     "id": 10,
@@ -87,7 +96,8 @@
     "marathi": "जबाबदारी",
     "meaning": "A job or duty you must do.",
     "grammar": "Noun",
-    "example": "Keeping the classroom clean is our responsibility."
+    "example": "Keeping the classroom clean is our responsibility.",
+    "image": "/__l5e/assets-v1/0f1a5a8a-762d-4c15-b084-38a99b71ab66/responsibility.jpg"
   },
   {
     "id": 11,
@@ -96,7 +106,8 @@
     "marathi": "मैत्री",
     "meaning": "A close and caring relationship between friends.",
     "grammar": "Noun",
-    "example": "Friendship makes life happy."
+    "example": "Friendship makes life happy.",
+    "image": "/__l5e/assets-v1/1961b063-2121-4150-8550-a26779b86b17/friendship.jpg"
   },
   {
     "id": 12,
@@ -105,7 +116,8 @@
     "marathi": "पर्यावरण",
     "meaning": "The world around us.",
     "grammar": "Noun",
-    "example": "We should protect the environment."
+    "example": "We should protect the environment.",
+    "image": "/__l5e/assets-v1/6d06fe26-7b13-4947-87c0-85a76209f699/environment.jpg"
   },
   {
     "id": 13,
@@ -114,7 +126,8 @@
     "marathi": "समुदाय",
     "meaning": "A group of people living and working together.",
     "grammar": "Noun",
-    "example": "Our community celebrated Independence Day together."
+    "example": "Our community celebrated Independence Day together.",
+    "image": "/__l5e/assets-v1/cfe72382-3c48-400b-b5ce-769c8a421e68/community.jpg"
   },
   {
     "id": 14,
@@ -123,7 +136,8 @@
     "marathi": "संघभावना",
     "meaning": "Working together with others to achieve a goal.",
     "grammar": "Noun",
-    "example": "Teamwork helped us win the match."
+    "example": "Teamwork helped us win the match.",
+    "image": "/__l5e/assets-v1/4d6bd096-7e95-444c-91d2-41b146ba175e/teamwork.jpg"
   },
   {
     "id": 15,
@@ -132,7 +146,8 @@
     "marathi": "आदर",
     "meaning": "Showing kindness and consideration to others.",
     "grammar": "Noun",
-    "example": "We should show respect to our elders."
+    "example": "We should show respect to our elders.",
+    "image": "/__l5e/assets-v1/4e2b2466-84a5-45d1-91fb-b40394ada4cc/respect.jpg"
   },
   {
     "id": 16,
@@ -141,7 +156,8 @@
     "marathi": "शिक्षक",
     "meaning": "A person who helps others learn.",
     "grammar": "Noun",
-    "example": "Our teacher explains lessons clearly."
+    "example": "Our teacher explains lessons clearly.",
+    "image": "/__l5e/assets-v1/60d63f5c-c23f-4912-b5d9-b206c4f13bf8/teacher.jpg"
   },
   {
     "id": 17,
@@ -150,7 +166,8 @@
     "marathi": "विद्यार्थी",
     "meaning": "A person who is learning in a school or college.",
     "grammar": "Noun",
-    "example": "Every student must complete the homework."
+    "example": "Every student must complete the homework.",
+    "image": "/__l5e/assets-v1/12cffea6-3691-4d95-9517-86e33cba70a2/student.jpg"
   },
   {
     "id": 18,
@@ -159,7 +176,8 @@
     "marathi": "वाचनालय",
     "meaning": "A place where books and resources are kept for reading or borrowing.",
     "grammar": "Noun",
-    "example": "I borrowed a book from the library."
+    "example": "I borrowed a book from the library.",
+    "image": "/__l5e/assets-v1/dd306f8e-868f-4db4-9c23-5ee9d3280ca1/library.jpg"
   },
   {
     "id": 19,
@@ -168,7 +186,8 @@
     "marathi": "प्रकल्प",
     "meaning": "A planned piece of work or activity.",
     "grammar": "Noun",
-    "example": "We made a science project for the exhibition."
+    "example": "We made a science project for the exhibition.",
+    "image": "/__l5e/assets-v1/2d21b151-b612-4382-a70c-062234930664/project.jpg"
   },
   {
     "id": 20,
@@ -177,7 +196,8 @@
     "marathi": "शोधणे",
     "meaning": "To find or learn something new.",
     "grammar": "Verb",
-    "example": "Scientists discover new things every year."
+    "example": "Scientists discover new things every year.",
+    "image": "/__l5e/assets-v1/a4eaa21e-80e9-4fd8-8ad0-aa1851ac1e49/discover.jpg"
   },
   {
     "id": 21,
@@ -186,7 +206,8 @@
     "marathi": "संरक्षण करणे",
     "meaning": "To keep safe.",
     "grammar": "Verb",
-    "example": "Trees help protect the soil from erosion."
+    "example": "Trees help protect the soil from erosion.",
+    "image": "/__l5e/assets-v1/8003ad78-7054-4fbd-9691-00cd86744a16/protect.jpg"
   },
   {
     "id": 22,
@@ -195,7 +216,8 @@
     "marathi": "समजावून सांगणे",
     "meaning": "To make something clear or easy to understand.",
     "grammar": "Verb",
-    "example": "Can you explain this question to me?"
+    "example": "Can you explain this question to me?",
+    "image": "/__l5e/assets-v1/eb2e0ac8-75c3-4535-9995-47cc76d72f00/explain.jpg"
   },
   {
     "id": 23,
@@ -204,7 +226,8 @@
     "marathi": "जिज्ञासू",
     "meaning": "Wanting to know or learn more about something.",
     "grammar": "Adjective",
-    "example": "The curious child asked many questions."
+    "example": "The curious child asked many questions.",
+    "image": "/__l5e/assets-v1/b3ced0f0-d2f5-4898-87f7-1f0b5c95f247/curious.jpg"
   },
   {
     "id": 24,
@@ -213,7 +236,8 @@
     "marathi": "प्रामाणिक",
     "meaning": "Always telling the truth.",
     "grammar": "Adjective",
-    "example": "An honest person always tells the truth."
+    "example": "An honest person always tells the truth.",
+    "image": "/__l5e/assets-v1/0835790a-f6c3-41f3-b52b-ec4f175951de/honest.jpg"
   },
   {
     "id": 25,
@@ -222,7 +246,8 @@
     "marathi": "शूर",
     "meaning": "Not afraid; showing courage.",
     "grammar": "Adjective",
-    "example": "The brave soldier protected the country."
+    "example": "The brave soldier protected the country.",
+    "image": "/__l5e/assets-v1/a9c0abec-0515-4b5f-9236-84bc0121db0e/brave.jpg"
   },
   {
     "id": 26,
@@ -231,7 +256,8 @@
     "marathi": "मदत करणारा",
     "meaning": "Ready to help others.",
     "grammar": "Adjective",
-    "example": "My friend was helpful when I was sick."
+    "example": "My friend was helpful when I was sick.",
+    "image": "/__l5e/assets-v1/8a5ec983-bcc6-4c86-9af7-845d9cf3cbeb/helpful.jpg"
   },
   {
     "id": 27,
@@ -240,7 +266,8 @@
     "marathi": "सुंदर",
     "meaning": "Very pleasing to look at.",
     "grammar": "Adjective",
-    "example": "The garden looks beautiful in spring."
+    "example": "The garden looks beautiful in spring.",
+    "image": "/__l5e/assets-v1/c0c36a04-d30f-4dc1-96e5-ea0f8d64be18/beautiful.jpg"
   },
   {
     "id": 28,
@@ -249,7 +276,8 @@
     "marathi": "महत्त्वाचे",
     "meaning": "Very useful or special.",
     "grammar": "Adjective",
-    "example": "Drinking water is important for good health."
+    "example": "Drinking water is important for good health.",
+    "image": "/__l5e/assets-v1/a7388f5b-ebe4-4586-b363-4fa02cf56cac/important.jpg"
   },
   {
     "id": 29,
@@ -258,7 +286,8 @@
     "marathi": "एकत्र",
     "meaning": "With each other; as a group.",
     "grammar": "Adverb",
-    "example": "The children worked together to clean the classroom."
+    "example": "The children worked together to clean the classroom.",
+    "image": "/__l5e/assets-v1/6e6e0aa9-9bfc-4117-a364-360751ad6e7b/together.jpg"
   },
   {
     "id": 30,
@@ -267,6 +296,7 @@
     "marathi": "काळजीपूर्वक",
     "meaning": "With care and attention.",
     "grammar": "Adverb",
-    "example": "Please cross the road carefully."
+    "example": "Please cross the road carefully.",
+    "image": "/__l5e/assets-v1/a49bb59a-3d7c-421f-9701-75d202214385/carefully.jpg"
   }
 ]
