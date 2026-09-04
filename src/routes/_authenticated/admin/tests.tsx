@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { isAdmin } from "@/lib/meanings";
 import { listAllAttempts, formatWhen } from "@/lib/tests";
+import { getTestQuestionCount, setTestQuestionCount, MIN_TEST_QUESTIONS, MAX_TEST_QUESTIONS, DEFAULT_TEST_QUESTIONS } from "@/lib/test-settings";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/tests")({
   head: () => ({
@@ -27,6 +29,35 @@ function AdminTests() {
     enabled: admin === true,
   });
   const [q, setQ] = useState("");
+  const qc = useQueryClient();
+  const { data: questionCount } = useQuery({
+    queryKey: ["test-question-count"],
+    queryFn: getTestQuestionCount,
+    enabled: admin === true,
+  });
+  const [countDraft, setCountDraft] = useState<string>("");
+  const [savingCount, setSavingCount] = useState(false);
+  useEffect(() => {
+    if (questionCount != null) setCountDraft(String(questionCount));
+  }, [questionCount]);
+
+  const saveCount = async () => {
+    const n = Number(countDraft);
+    if (!Number.isFinite(n) || n < MIN_TEST_QUESTIONS || n > MAX_TEST_QUESTIONS) {
+      toast.error(`Enter a number between ${MIN_TEST_QUESTIONS} and ${MAX_TEST_QUESTIONS}`);
+      return;
+    }
+    setSavingCount(true);
+    try {
+      const saved = await setTestQuestionCount(n);
+      await qc.invalidateQueries({ queryKey: ["test-question-count"] });
+      toast.success(`Tests will now ask ${saved} word${saved === 1 ? "" : "s"}`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not save");
+    } finally {
+      setSavingCount(false);
+    }
+  };
   const [open, setOpen] = useState<string | null>(null);
 
   if (checking) return <div className="mx-auto max-w-4xl px-4 py-16 text-muted-foreground">Checking access…</div>;
@@ -64,6 +95,29 @@ function AdminTests() {
           aria-label="Search students"
           className="w-64 rounded-full border-2 border-border bg-card px-4 py-2 text-sm font-semibold outline-none focus:border-primary"
         />
+      </div>
+
+      <div className="mt-6 flex flex-wrap items-center gap-3 rounded-3xl bg-card p-5 shadow-soft">
+        <label htmlFor="qcount" className="font-bold">Words per test</label>
+        <input
+          id="qcount"
+          type="number"
+          min={MIN_TEST_QUESTIONS}
+          max={MAX_TEST_QUESTIONS}
+          value={countDraft}
+          onChange={e => setCountDraft(e.target.value)}
+          className="w-24 rounded-2xl border-2 border-border bg-background px-4 py-2 font-semibold outline-none focus:border-primary"
+        />
+        <button
+          onClick={saveCount}
+          disabled={savingCount || countDraft === String(questionCount ?? DEFAULT_TEST_QUESTIONS)}
+          className="rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground shadow-soft transition hover:scale-[1.03] disabled:opacity-40 disabled:hover:scale-100"
+        >
+          {savingCount ? "Saving…" : "Save"}
+        </button>
+        <span className="text-sm text-muted-foreground">
+          Between {MIN_TEST_QUESTIONS} and {MAX_TEST_QUESTIONS} words. Applies to every new test.
+        </span>
       </div>
 
       {!isLoading && filtered.length === 0 && (

@@ -10,6 +10,7 @@ export interface WordEntry {
   meaning: string;
   grammar: Grammar;
   example: string;
+  image?: string;
 }
 
 export const WORDS: WordEntry[] = words as WordEntry[];

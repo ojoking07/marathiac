@@ -6,10 +6,10 @@ import { listProgress, pickTestWords, recordAttempt } from "@/lib/progress";
 import { WORDS, type WordEntry } from "@/lib/words";
 import { submitTestAttempt, type ScoredAnswer } from "@/lib/test-scoring.functions";
 import { listMyAttempts, formatWhen } from "@/lib/tests";
+import { getTestQuestionCount, DEFAULT_TEST_QUESTIONS } from "@/lib/test-settings";
 import { NoAssistInput, NoAssistTextarea } from "@/components/NoAssistTextarea";
 import { toast } from "sonner";
 
-const QUESTION_COUNT = 10;
 const TIME_LIMIT_SEC = 15 * 60; // 15 minutes
 const MAX_VIOLATIONS = 1;
 
@@ -49,6 +49,10 @@ function TestPage() {
     queryFn: listMyAttempts,
   });
   const previous = attempts?.[0] ?? null;
+  const { data: questionCount = DEFAULT_TEST_QUESTIONS } = useQuery({
+    queryKey: ["test-question-count"],
+    queryFn: getTestQuestionCount,
+  });
 
   const [stage, setStage] = useState<"intro" | "active" | "done">("intro");
   const [words, setWords] = useState<WordEntry[]>([]);
@@ -124,7 +128,7 @@ function TestPage() {
   }, [stage]);
 
   const startTest = async () => {
-    const chosen = pickTestWords(progress ?? [], QUESTION_COUNT);
+    const chosen = pickTestWords(progress ?? [], questionCount);
     setWords(chosen);
     setAnswers(chosen.map(w => ({ wordId: w.id, english: "", sentence: "" })));
     setIdx(0);
@@ -269,7 +273,7 @@ function TestPage() {
         <div className="rounded-3xl bg-card p-8 shadow-pop">
           <h1 className="font-display text-4xl font-extrabold">📝 English Test</h1>
           <p className="mt-2 text-muted-foreground">
-            {QUESTION_COUNT} Marathi words → write the English word AND a sentence using it. Each question is worth 2 points.
+            {questionCount} Marathi words → write the English word AND a sentence using it. Each question is worth 2 points.
           </p>
           <div className="mt-5 rounded-2xl bg-secondary/60 p-4">
             <div className="font-bold">Lockdown rules:</div>
