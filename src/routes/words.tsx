@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { WORDS, GRAMMAR_STYLES, type Grammar } from "@/lib/words";
+import { SpeakButton } from "@/components/SpeakButton";
 
 export const Route = createFileRoute("/words")({
   head: () => ({
@@ -132,6 +133,7 @@ function WordsPage() {
               >
                 ✏️ Write a sentence
               </Link>
+              </div>
             </article>
           );
         })}
