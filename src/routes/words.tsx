@@ -96,14 +96,28 @@ function WordsPage() {
         {list.map(w => {
           const s = GRAMMAR_STYLES[w.grammar];
           return (
-            <article key={w.id} className={`rounded-3xl bg-card p-5 shadow-soft ring-1 ${s.ring} transition hover:-translate-y-1 hover:shadow-pop`}>
+            <article key={w.id} className={`overflow-hidden rounded-3xl bg-card shadow-soft ring-1 ${s.ring} transition hover:-translate-y-1 hover:shadow-pop`}>
+              {w.image && (
+                <img
+                  src={w.image}
+                  alt={`Picture showing the meaning of the word ${w.word}`}
+                  loading="lazy"
+                  width={640}
+                  height={512}
+                  className="aspect-[5/4] w-full object-cover"
+                />
+              )}
+              <div className="p-5">
               <div className="flex items-center justify-between">
                 <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold ${s.chip}`}>
                   {s.emoji} {s.label}
                 </span>
                 <span className="text-xs font-semibold text-muted-foreground">#{w.id}</span>
               </div>
-              <h2 className="mt-3 font-display text-3xl font-extrabold text-foreground">{w.word}</h2>
+              <div className="mt-3 flex items-center gap-2">
+                <h2 className="font-display text-3xl font-extrabold text-foreground">{w.word}</h2>
+                <SpeakButton text={w.word} />
+              </div>
               <div className="text-sm font-semibold text-muted-foreground">
                 <span className="text-foreground/70">{w.pronunciation}</span>
               </div>
