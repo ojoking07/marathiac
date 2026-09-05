@@ -320,7 +320,10 @@ function TestPage() {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <div className="text-lg font-semibold text-muted-foreground">{r.word.pronunciation}</div>
-                  <div className="font-display text-2xl font-extrabold">{r.word.word}</div>
+                  <div className="flex items-center gap-2">
+                    <div className="font-display text-2xl font-extrabold">{r.word.word}</div>
+                    <SpeakButton text={r.word.word} />
+                  </div>
                 </div>
                 <div className="rounded-full bg-primary/10 px-3 py-1 font-bold text-primary">{r.points}/2</div>
               </div>

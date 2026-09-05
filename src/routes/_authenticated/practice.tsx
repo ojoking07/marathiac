@@ -8,6 +8,7 @@ import { checkGrammar } from "@/lib/grammar";
 import { addSentence } from "@/lib/sentences";
 import { listProgress, recordAttempt } from "@/lib/progress";
 import { NoAssistTextarea } from "@/components/NoAssistTextarea";
+import { SpeakButton } from "@/components/SpeakButton";
 import { toast } from "sonner";
 
 const searchSchema = z.object({ word: z.string().optional() });
