@@ -8,6 +8,7 @@ import { submitTestAttempt, type ScoredAnswer } from "@/lib/test-scoring.functio
 import { listMyAttempts, formatWhen } from "@/lib/tests";
 import { getTestQuestionCount, DEFAULT_TEST_QUESTIONS } from "@/lib/test-settings";
 import { NoAssistInput, NoAssistTextarea } from "@/components/NoAssistTextarea";
+import { SpeakButton } from "@/components/SpeakButton";
 import { toast } from "sonner";
 
 const TIME_LIMIT_SEC = 15 * 60; // 15 minutes
@@ -320,7 +321,10 @@ function TestPage() {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <div className="text-lg font-semibold text-muted-foreground">{r.word.pronunciation}</div>
-                  <div className="font-display text-2xl font-extrabold">{r.word.word}</div>
+                  <div className="flex items-center gap-2">
+                    <div className="font-display text-2xl font-extrabold">{r.word.word}</div>
+                    <SpeakButton text={r.word.word} />
+                  </div>
                 </div>
                 <div className="rounded-full bg-primary/10 px-3 py-1 font-bold text-primary">{r.points}/2</div>
               </div>

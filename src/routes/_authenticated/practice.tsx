@@ -8,6 +8,7 @@ import { checkGrammar } from "@/lib/grammar";
 import { addSentence } from "@/lib/sentences";
 import { listProgress, recordAttempt } from "@/lib/progress";
 import { NoAssistTextarea } from "@/components/NoAssistTextarea";
+import { SpeakButton } from "@/components/SpeakButton";
 import { toast } from "sonner";
 
 const searchSchema = z.object({ word: z.string().optional() });
@@ -94,7 +95,20 @@ function PracticePage() {
           </div>
 
           <div className="mt-5 animate-pop-in" key={current.id}>
-            <h1 className="font-display text-6xl font-extrabold sm:text-7xl">{current.word}</h1>
+            {current.image && (
+              <img
+                src={current.image}
+                alt={`Picture showing the meaning of the word ${current.word}`}
+                loading="lazy"
+                width={640}
+                height={512}
+                className="mb-4 aspect-[5/4] w-full max-w-sm rounded-3xl object-cover shadow-soft"
+              />
+            )}
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="font-display text-6xl font-extrabold sm:text-7xl">{current.word}</h1>
+              <SpeakButton text={current.word} />
+            </div>
             <div className="mt-1 text-lg font-semibold text-muted-foreground">
               <span className="text-foreground/80">{current.pronunciation}</span>
             </div>
