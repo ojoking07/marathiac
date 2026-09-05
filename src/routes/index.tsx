@@ -150,6 +150,16 @@ function Home() {
                   </span>
                   <span className="text-xs font-semibold text-muted-foreground">#{w.id}</span>
                 </div>
+                {w.image && (
+                  <img
+                    src={w.image}
+                    alt={`Picture showing the meaning of the word ${w.word}`}
+                    loading="lazy"
+                    width={640}
+                    height={512}
+                    className="mt-3 aspect-[5/4] w-full rounded-2xl object-cover"
+                  />
+                )}
                 <div className="mt-3 font-display text-3xl font-extrabold text-foreground">{w.word}</div>
                 <div className="text-sm text-muted-foreground">{w.pronunciation}</div>
                 <p className="mt-2 text-sm text-foreground/80">{w.meaning}</p>
