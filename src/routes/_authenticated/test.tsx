@@ -8,6 +8,7 @@ import { submitTestAttempt, type ScoredAnswer } from "@/lib/test-scoring.functio
 import { listMyAttempts, formatWhen } from "@/lib/tests";
 import { getTestQuestionCount, DEFAULT_TEST_QUESTIONS } from "@/lib/test-settings";
 import { NoAssistInput, NoAssistTextarea } from "@/components/NoAssistTextarea";
+import { SpeakButton } from "@/components/SpeakButton";
 import { toast } from "sonner";
 
 const TIME_LIMIT_SEC = 15 * 60; // 15 minutes
