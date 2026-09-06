@@ -13,7 +13,20 @@ export interface WordEntry {
   image?: string;
 }
 
-export const WORDS: WordEntry[] = words as WordEntry[];
+// Word pictures live on Lovable's asset CDN, which is only mounted on Lovable
+// hosting. Use the stable absolute origin so the pictures also load when the
+// site is served from another host (e.g. Vercel).
+const ASSET_ORIGIN = "https://project--3121f0d0-ac4b-4bd3-a1db-4a608fef3a0f.lovable.app";
+
+function absoluteImage(src?: string): string | undefined {
+  if (!src) return undefined;
+  return src.startsWith("/__l5e/") ? `${ASSET_ORIGIN}${src}` : src;
+}
+
+export const WORDS: WordEntry[] = (words as WordEntry[]).map(w => ({
+  ...w,
+  image: absoluteImage(w.image),
+}));
 
 export const GRAMMAR_STYLES: Record<Grammar, { chip: string; ring: string; label: string; emoji: string }> = {
   Noun:      { chip: "bg-ocean text-ocean-foreground",       ring: "ring-ocean/30",   label: "Noun",      emoji: "🧱" },
