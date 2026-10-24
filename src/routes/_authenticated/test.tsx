@@ -9,6 +9,7 @@ import { listMyAttempts, formatWhen } from "@/lib/tests";
 import { getTestQuestionCount, DEFAULT_TEST_QUESTIONS } from "@/lib/test-settings";
 import { NoAssistInput, NoAssistTextarea } from "@/components/NoAssistTextarea";
 import { SpeakButton } from "@/components/SpeakButton";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const TIME_LIMIT_SEC = 15 * 60; // 15 minutes
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/_authenticated/test")({
       { property: "og:title", content: "English Vocabulary Test — Alphabet Commanders" },
       { property: "og:description", content: "A timed, automatically scored English word and sentence test in lockdown mode." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://marathiac.lovable.app/test" },
     ],
   }),
@@ -55,7 +57,7 @@ function TestPage() {
     queryFn: getTestQuestionCount,
   });
 
-  const [stage, setStage] = useState<"intro" | "active" | "done">("intro");
+  const [stage, setStage] = useState<"intro" | "active" | "done" | "failed">("intro");
   const [words, setWords] = useState<WordEntry[]>([]);
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
@@ -65,13 +67,16 @@ function TestPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const submittedRef = useRef(false);
+  const submitLatest = useRef<(warnings?: string[]) => void>(() => {});
+  const violationsRef = useRef<string[]>([]);
+  const [submittedAt, setSubmittedAt] = useState<string | null>(null);
 
   // Timer
   useEffect(() => {
     if (stage !== "active") return;
     const t = setInterval(() => {
       setTimeLeft(prev => {
-        if (prev <= 1) { autoSubmit("time_up"); return 0; }
+        if (prev <= 1) { submitLatest.current(); return 0; }
         return prev - 1;
       });
     }, 1000);
@@ -84,12 +89,12 @@ function TestPage() {
     if (stage !== "active") return;
 
     const flag = (reason: string) => {
-      setViolations(v => {
-        const next = [...v, `${reason} at ${new Date().toLocaleTimeString()}`];
-        if (next.length >= MAX_VIOLATIONS) autoSubmit("too_many_violations");
-        else toast.warning(`Warning: ${reason}. (${next.length}/${MAX_VIOLATIONS})`);
-        return next;
-      });
+      if (submittedRef.current) return;
+      const next = [...violationsRef.current, `${reason} at ${new Date().toLocaleTimeString()}`];
+      violationsRef.current = next;
+      setViolations(next);
+      if (next.length >= MAX_VIOLATIONS) submitLatest.current(next);
+      else toast.warning(`Warning: ${reason}. (${next.length}/${MAX_VIOLATIONS})`);
     };
 
     const onVisibility = () => { if (document.hidden) flag("Left the test tab/window"); };
@@ -135,6 +140,7 @@ function TestPage() {
     setIdx(0);
     setTimeLeft(TIME_LIMIT_SEC);
     setViolations([]);
+    violationsRef.current = [];
     submittedRef.current = false;
     setStage("active");
     try { await document.documentElement.requestFullscreen(); } catch { /* ignore */ }
@@ -144,9 +150,7 @@ function TestPage() {
     setAnswers(a => a.map((x, i) => i === idx ? { ...x, ...patch } : x));
   };
 
-  const autoSubmit = (_reason: string) => { void _reason; submitTest(); };
-
-  const submitTest = async () => {
+  const submitTest = async (warnings = violations) => {
     if (submittedRef.current) return;
     submittedRef.current = true;
 
@@ -163,14 +167,17 @@ function TestPage() {
             english: answers[i]?.english ?? "",
             sentence: answers[i]?.sentence ?? "",
           })),
-          violations,
+          violations: warnings,
           durationSec: TIME_LIMIT_SEC - timeLeft,
         },
       });
 
       const byId = new Map(words.map(w => [w.id, w]));
-      const results: Scored[] = res.results.map((r: ScoredAnswer) => ({
-        word: byId.get(r.wordId)!,
+      const results: Scored[] = res.results.flatMap((r: ScoredAnswer) => {
+        const word = byId.get(r.wordId);
+        if (!word) return [];
+        return [{
+        word,
         english: r.english,
         sentence: r.sentence,
         spellingCorrect: r.spellingCorrect,
@@ -178,8 +185,10 @@ function TestPage() {
         grammarStars: r.grammarStars,
         grammarIssues: r.grammarIssues,
         points: r.points,
-      }));
+      }];
+      });
       setScored(results);
+      setSubmittedAt(res.createdAt);
 
       for (const r of results) {
         try {
@@ -191,13 +200,32 @@ function TestPage() {
       qc.invalidateQueries({ queryKey: ["all-attempts"] });
     } catch (e) {
       console.error(e);
-      toast.error("We couldn't score your test. Please try again.");
+      // A lost response may follow a successful write. Read back before offering a retry.
+      const saved = await listMyAttempts().catch(() => []);
+      if (saved.length > 0) {
+        qc.setQueryData(["my-attempts"], saved);
+        return;
+      }
+      toast.error("Your test could not be saved. Your answers are still here; please retry submitting.");
       submittedRef.current = false;
-      setStage("intro");
+      setStage("failed");
     } finally {
       setSubmitting(false);
     }
   };
+  useEffect(() => {
+    submitLatest.current = (warnings) => { void submitTest(warnings); };
+  });
+
+  if (stage === "failed") {
+    return (
+      <div className="mx-auto max-w-md px-4 py-20 text-center">
+        <h1 className="text-3xl">Your test has not been saved yet</h1>
+        <p className="mt-3 text-muted-foreground">Your answers have been kept. Check your connection and retry submitting; do not refresh or close this page.</p>
+        <Button onClick={() => { void submitTest(); }} className="mt-6">Retry submitting</Button>
+      </div>
+    );
+  }
 
   // Submitting spinner
   if (stage === "done" && submitting) {
@@ -305,7 +333,7 @@ function TestPage() {
         <div className="rounded-3xl bg-gradient-hero p-8 shadow-pop text-center">
           <div className="text-6xl">{pct >= 80 ? "🏆" : pct >= 60 ? "🎉" : "💪"}</div>
           <h1 className="mt-3 font-display text-3xl font-extrabold">Test submitted — your results</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Submitted on {formatWhen(previous?.created_at ?? new Date().toISOString())}</p>
+          <p className="mt-1 text-sm text-muted-foreground">Submitted on {formatWhen(submittedAt ?? previous?.created_at ?? new Date().toISOString())}</p>
           <p className="mt-2 font-display text-5xl font-extrabold">{total} / {max}</p>
           <p className="text-lg font-semibold text-muted-foreground">{pct}%</p>
           {violations.length > 0 && (

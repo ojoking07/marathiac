@@ -36,7 +36,7 @@ export async function scoreTestSubmission(userId: string, data: Submission) {
   const maxScore = results.length * 2;
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { error } = await supabaseAdmin.from("test_attempts").insert({
+  const { data: saved, error } = await supabaseAdmin.from("test_attempts").insert({
     user_id: userId,
     score,
     max_score: maxScore,
@@ -52,11 +52,12 @@ export async function scoreTestSubmission(userId: string, data: Submission) {
     })),
     integrity: { violations: data.violations, duration_used: data.durationSec },
     duration_sec: data.durationSec,
-  });
+  }).select("id, created_at").single();
   if (error) {
     console.error("test_attempts insert failed", error);
     throw new Error("Could not save your test attempt.");
   }
 
-  return { score, maxScore, results };
+  if (!saved) throw new Error("Could not confirm your saved test attempt.");
+  return { score, maxScore, results, attemptId: saved.id, createdAt: saved.created_at };
 }
