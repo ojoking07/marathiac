@@ -1,9 +1,9 @@
 import { describe, expect, test, mock } from "bun:test";
 import { testSubmissionSchema } from "./test-scoring.schema";
 
-let inserted: Record<string, unknown> | undefined;
+let inserted;
 mock.module("@/integrations/supabase/client.server", () => ({
-  supabaseAdmin: { from: () => ({ insert: (row: Record<string, unknown>) => {
+  supabaseAdmin: { from: () => ({ insert: (row) => {
     inserted = row;
     return { select: () => ({ single: async () => ({ data: { id: "attempt-1", created_at: "2026-10-24T19:22:00Z" }, error: null }) }) };
   } }) },
