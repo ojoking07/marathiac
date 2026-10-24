@@ -5,6 +5,8 @@ import { isAdmin } from "@/lib/meanings";
 import { listAllAttempts, formatWhen } from "@/lib/tests";
 import { getTestQuestionCount, setTestQuestionCount, MIN_TEST_QUESTIONS, MAX_TEST_QUESTIONS, DEFAULT_TEST_QUESTIONS } from "@/lib/test-settings";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/tests")({
   head: () => ({
@@ -14,6 +16,7 @@ export const Route = createFileRoute("/_authenticated/admin/tests")({
       { property: "og:title", content: "Teacher Review — Test Results" },
       { property: "og:description", content: "See each student's test score and their written English answers." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://marathiac.lovable.app/admin/tests" },
       { name: "robots", content: "noindex, nofollow" },
     ],
@@ -23,10 +26,11 @@ export const Route = createFileRoute("/_authenticated/admin/tests")({
 
 function AdminTests() {
   const { data: admin, isLoading: checking } = useQuery({ queryKey: ["is-admin"], queryFn: isAdmin });
-  const { data: students = [], isLoading } = useQuery({
+  const { data: students = [], isLoading, error: resultsError, refetch, isFetching } = useQuery({
     queryKey: ["all-attempts"],
     queryFn: listAllAttempts,
     enabled: admin === true,
+    refetchInterval: 30_000,
   });
   const [q, setQ] = useState("");
   const qc = useQueryClient();
@@ -88,6 +92,8 @@ function AdminTests() {
             {isLoading ? "Loading…" : `${students.length} student${students.length === 1 ? "" : "s"} · ${totalAttempts} test${totalAttempts === 1 ? "" : "s"} submitted`}
           </p>
         </div>
+        <div className="flex flex-wrap items-center gap-2">
+        <Button variant="outline" size="icon" aria-label="Refresh test results" title="Refresh test results" disabled={isFetching} onClick={() => { void refetch(); }}><RefreshCw className={isFetching ? "animate-spin" : ""} /></Button>
         <input
           value={q}
           onChange={e => setQ(e.target.value)}
@@ -95,6 +101,7 @@ function AdminTests() {
           aria-label="Search students"
           className="w-64 rounded-full border-2 border-border bg-card px-4 py-2 text-sm font-semibold outline-none focus:border-primary"
         />
+        </div>
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3 rounded-3xl bg-card p-5 shadow-soft">
@@ -120,7 +127,8 @@ function AdminTests() {
         </span>
       </div>
 
-      {!isLoading && filtered.length === 0 && (
+      {resultsError && <p role="alert" className="mt-6 text-destructive">Could not load test results. Please refresh the results or sign in again.</p>}
+      {!resultsError && !isLoading && filtered.length === 0 && (
         <p className="mt-10 rounded-3xl bg-card p-8 text-center text-muted-foreground shadow-soft">No submitted tests yet.</p>
       )}
 

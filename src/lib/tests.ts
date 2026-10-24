@@ -58,7 +58,7 @@ export interface StudentAttempts {
 
 /** Admin-only: every student's test attempts, grouped by student. RLS enforces access. */
 export async function listAllAttempts(): Promise<StudentAttempts[]> {
-  const [{ data: rows, error }, { data: profiles }] = await Promise.all([
+  const [{ data: rows, error }, { data: profiles, error: profilesError }] = await Promise.all([
     supabase
       .from("test_attempts")
       .select("id, user_id, score, max_score, duration_sec, created_at, details, integrity")
@@ -66,6 +66,7 @@ export async function listAllAttempts(): Promise<StudentAttempts[]> {
     supabase.from("profiles").select("id, name, grade, village"),
   ]);
   if (error) throw error;
+  if (profilesError) throw profilesError;
 
   const byUser = new Map<string, TestAttempt[]>();
   for (const raw of rows ?? []) {
