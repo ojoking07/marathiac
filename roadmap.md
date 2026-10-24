@@ -1,0 +1,3 @@
+- [ ] Diagnose and repair test submission without losing students' answers.
+- [ ] Verify saved scores and responses are readable by teachers with existing private access controls.
+- [ ] Run regression and signed-in submission checks, then apply required package security update.
